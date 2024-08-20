@@ -4,14 +4,14 @@ import 'package:movies_application/ui/app_colors.dart';
 
 class AppThemeData {
   static final ThemeData appTheme = ThemeData(
-    primaryColor: AppColors.balckColor,
-    scaffoldBackgroundColor: AppColors.balckColor,
+    primaryColor: AppColors.blackColor,
+    scaffoldBackgroundColor: AppColors.blackColor,
     elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
             backgroundColor: WidgetStatePropertyAll(AppColors.darkGreyColor))),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       type: BottomNavigationBarType.fixed,
-      showSelectedLabels: false,
+      showSelectedLabels: true,
       showUnselectedLabels: true,
       unselectedItemColor: AppColors.lightGreyColor,
       selectedItemColor: AppColors.orangeColor,
