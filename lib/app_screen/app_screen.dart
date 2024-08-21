@@ -4,6 +4,7 @@ import 'package:movies_application/browse_tab/browse_tab.dart';
 import 'package:movies_application/home_tab/home_tab.dart';
 import 'package:movies_application/search_tab/search_tab.dart';
 import 'package:movies_application/watch_list_tab/watch_list_tab.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AppScreen extends StatefulWidget {
   static const String routeName = "AppScreen";
@@ -19,6 +20,11 @@ class _AppScreenState extends State<AppScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var homeText = AppLocalizations.of(context)!.home;
+    var searchText = AppLocalizations.of(context)!.search;
+    var browseText = AppLocalizations.of(context)!.browse;
+    var watchListText = AppLocalizations.of(context)!.watchlist;
+
     return Scaffold(
       body: tabs[selectedIndex],
       bottomNavigationBar: BottomAppBar(
@@ -32,22 +38,22 @@ class _AppScreenState extends State<AppScreen> {
               selectedIndex = index;
             });
           },
-          items: const [
+          items: [
             BottomNavigationBarItem(
               icon: Icon(Fluent.FluentIcons.home),
-              label: 'Home',
+              label: homeText,
             ),
             BottomNavigationBarItem(
               icon: Icon(Fluent.FluentIcons.video_search),
-              label: 'Search',
+              label: searchText,
             ),
             BottomNavigationBarItem(
               icon: Icon(Fluent.FluentIcons.my_movies_t_v),
-              label: 'Browse',
+              label: browseText,
             ),
             BottomNavigationBarItem(
               icon: Icon(Fluent.FluentIcons.favorite_list),
-              label: 'Watchlist',
+              label: watchListText,
             ),
           ],
         ),
