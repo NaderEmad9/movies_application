@@ -1,0 +1,12 @@
+{
+    "@@locale": "en",
+    "arabic": "Arabic",
+    "english": "English",
+    "watchlist": "Watchlist",
+    "browse": "Browse",
+    "search": "Search",
+    "searching": "search...",
+    "home": "Home",
+    "movies": "Movies",
+    "no_movies": "No movies found"
+}
