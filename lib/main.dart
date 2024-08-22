@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:movies_application/ui/app_theme_data.dart';
+import 'app_screen/app_screen.dart';
 import 'package:movies_application/home_tab/movie_details/movie_details_screen.dart';
 import 'package:movies_application/app_screen/app_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:movies_application/ui/app_theme_data.dart';
-import 'app_screen/app_screen.dart';
-
 import 'app_screen/app_screen.dart';
 
 void main() {

@@ -13,7 +13,7 @@ class AppColors {
   static const Color navigationBarColor =
       Color(0xff1A1A1A); // this color only used with the bottom navigation bar
   static const Color whiteColor = Color(0xffFFFFFF);
-  static const Color balckColor = Color(
+  static const Color blackColor = Color(
       0xff121312); // this color is the main application color (ex. App background)
   static const Color moviesDetailsColor = Color(
       0xffB5B4B4); // this color is used only for movies details , for example(2019  PG-13  2h 7m) under the movie title
