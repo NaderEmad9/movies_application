@@ -64,7 +64,7 @@ class HomeTabState extends State<HomeTab> {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(8),
                           child: Image.asset(
-                            '/Users/naderemad/movies_application/assets/images/deadpool.png',
+                            'assets/images/deadpool.png',
                             fit: BoxFit.fill,
                             width: double.infinity,
                             height: double.infinity,
