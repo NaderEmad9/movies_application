@@ -6,10 +6,6 @@ class AppColors {
       Color(0xffCBCBCB); // for labels and unselected tabs
   static const Color darkGreyColor = Color(
       0xff514F4F); // background for (more like this, New releases, Recomended)
-  static const Color moreLikeThisBackgroundColor = Color(
-      0xff282A28); // background color for moreLikeThisBackgroundColorContainer
-  static const Color boomMarkAddIconColor = Color(
-      0xFF514F4F); // color for boomMarkAddIconColor
   static const Color navigationBarColor =
       Color(0xff1A1A1A); // this color only used with the bottom navigation bar
   static const Color whiteColor = Color(0xffFFFFFF);
