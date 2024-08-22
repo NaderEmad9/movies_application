@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import '../ui/app_colors.dart';
+import 'movie_details/show_movie_details.dart';
+import 'movie_details/show_movies.dart';
+import 'movie_details/similar_movies.dart';
 import 'content.dart';
+
 
 class HomeTab extends StatelessWidget {
   @override
