@@ -23,82 +23,37 @@ class WatchListTabState extends State<WatchListTab> {
   List<Map<String, dynamic>> mockItems() {
     return [
       {
-        'imageUrl': 'https://via.placeholder.com/650/',
+        'imageUrl': 'https://via.placeholder.com/600',
         'title': 'Title',
         'description': 'The description for movie here.',
       },
       {
-        'imageUrl': 'https://via.placeholder.com/650/',
+        'imageUrl': 'https://via.placeholder.com/600',
         'title': 'Title',
         'description': 'The description for movie here.',
       },
       {
-        'imageUrl': 'https://via.placeholder.com/650/',
+        'imageUrl': 'https://via.placeholder.com/600',
         'title': 'Title',
         'description': 'The description for movie here.',
       },
       {
-        'imageUrl': 'https://via.placeholder.com/650/',
+        'imageUrl': 'https://via.placeholder.com/600',
         'title': 'Title',
         'description': 'The description for movie here.',
       },
       {
-        'imageUrl': 'https://via.placeholder.com/650/',
+        'imageUrl': 'https://via.placeholder.com/600',
         'title': 'Title',
         'description': 'The description for movie here.',
       },
       {
-        'imageUrl': 'https://via.placeholder.com/650/',
+        'imageUrl': 'https://via.placeholder.com/600',
         'title': 'Title',
         'description': 'The description for movie here.',
       },
       {
-        'imageUrl': 'https://via.placeholder.com/650/',
-        'title': 'Title',
-        'description': 'The description for movie here.',
-      },
-      {
-        'imageUrl': 'https://via.placeholder.com/650/',
-        'title': 'Title',
-        'description': 'The description for movie here.',
-      },
-      {
-        'imageUrl': 'https://via.placeholder.com/650/',
-        'title': 'Title',
-        'description': 'The description for movie here.',
-      },
-      {
-        'imageUrl': 'https://via.placeholder.com/650/',
-        'title': 'Title',
-        'description': 'The description for movie here.',
-      },
-      {
-        'imageUrl': 'https://via.placeholder.com/650/',
-        'title': 'Title',
-        'description': 'The description for movie here.',
-      },
-      {
-        'imageUrl': 'https://via.placeholder.com/650/',
-        'title': 'Title',
-        'description': 'The description for movie here.',
-      },
-      {
-        'imageUrl': 'https://via.placeholder.com/650/',
-        'title': 'Title',
-        'description': 'The description for movie here.',
-      },
-      {
-        'imageUrl': 'https://via.placeholder.com/650/',
-        'title': 'Title',
-        'description': 'The description for movie here.',
-      },
-      {
-        'imageUrl': 'https://via.placeholder.com/650/',
-        'title': 'Title',
-        'description': 'The description for movie here.',
-      },
-      {
-        'imageUrl': 'https://via.placeholder.com/650/',
+        'imageUrl': 'https://via.placeholder.com/600',
         'title': 'Title',
         'description': 'The description for movie here.',
       },
@@ -121,7 +76,7 @@ class WatchListTabState extends State<WatchListTab> {
       ),
       extendBodyBehindAppBar: true,
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
             child: FutureBuilder<List<Map<String, dynamic>>>(
@@ -129,9 +84,10 @@ class WatchListTabState extends State<WatchListTab> {
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(
-                      child: Platform.isIOS
-                          ? const CupertinoActivityIndicator()
-                          : const CircularProgressIndicator());
+                    child: Platform.isIOS
+                        ? const CupertinoActivityIndicator()
+                        : const CircularProgressIndicator(),
+                  );
                 } else if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}'));
                 } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -163,26 +119,41 @@ class WatchListTabState extends State<WatchListTab> {
     required String description,
   }) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Padding(
           padding: const EdgeInsets.all(12.0),
           child: Row(
             children: [
-              Image.network(imageUrl,
-                  width: 130, height: 100, fit: BoxFit.cover),
+              Image.network(
+                imageUrl,
+                width: 130,
+                height: 100,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    color: Colors.grey,
+                    child: Center(child: Text('Image failed to load')),
+                  );
+                },
+              ),
               const SizedBox(width: 16),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(title, style: Theme.of(context).textTheme.titleMedium),
+                    Text(
+                      title,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
                     const SizedBox(height: 8),
-                    Text(description,
-                        style: Theme.of(context)
-                            .textTheme
-                            .labelMedium!
-                            .copyWith(color: AppColors.lightGreyColor)),
+                    Text(
+                      description,
+                      style: Theme.of(context)
+                          .textTheme
+                          .labelMedium!
+                          .copyWith(color: AppColors.lightGreyColor),
+                    ),
                   ],
                 ),
               ),

@@ -13,7 +13,7 @@ class AppThemeData {
             backgroundColor: WidgetStatePropertyAll(AppColors.darkGreyColor))),
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       type: BottomNavigationBarType.fixed,
-      showSelectedLabels: true,
+      showSelectedLabels: false,
       showUnselectedLabels: true,
       unselectedItemColor: AppColors.lightGreyColor,
       selectedItemColor: AppColors.orangeColor,
