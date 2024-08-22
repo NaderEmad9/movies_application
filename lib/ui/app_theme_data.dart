@@ -4,12 +4,14 @@ import 'package:movies_application/ui/app_colors.dart';
 
 class AppThemeData {
   static final ThemeData appTheme = ThemeData(
-    primaryColor: AppColors.balckColor,
+    // primaryColor: AppColors.balckColor,
     scaffoldBackgroundColor: AppColors.balckColor,
-    elevatedButtonTheme: ElevatedButtonThemeData(
+    appBarTheme: const AppBarTheme(backgroundColor: AppColors.balckColor),
+    splashFactory: NoSplash.splashFactory,
+    elevatedButtonTheme: const ElevatedButtonThemeData(
         style: ButtonStyle(
             backgroundColor: WidgetStatePropertyAll(AppColors.darkGreyColor))),
-    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       type: BottomNavigationBarType.fixed,
       showSelectedLabels: false,
       showUnselectedLabels: true,
@@ -17,7 +19,7 @@ class AppThemeData {
       selectedItemColor: AppColors.orangeColor,
       backgroundColor: AppColors.navigationBarColor,
     ),
-    bottomAppBarTheme: BottomAppBarTheme(
+    bottomAppBarTheme: const BottomAppBarTheme(
       color: AppColors.navigationBarColor,
       elevation: 0.5,
     ),
@@ -52,6 +54,11 @@ class AppThemeData {
         fontWeight: FontWeight.normal,
         color: AppColors.lightGreyColor,
       ),
+      headlineLarge: GoogleFonts.inter(
+        fontSize: 16,
+        fontWeight: FontWeight.w300,
+        color: AppColors.whiteColor,
+      ),
       headlineSmall: GoogleFonts.poppins(
         fontSize: 10,
         fontWeight: FontWeight.normal,
@@ -61,19 +68,32 @@ class AppThemeData {
     inputDecorationTheme: InputDecorationTheme(
       prefixIconColor: AppColors.lightGreyColor,
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(20),
-        borderSide: BorderSide(color: AppColors.lightGreyColor),
+        borderRadius: BorderRadius.circular(30),
+        borderSide: const BorderSide(color: AppColors.lightGreyColor),
       ),
-      labelStyle: TextStyle(color: AppColors.lightGreyColor),
+      labelStyle: const TextStyle(color: AppColors.lightGreyColor),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(20),
-        borderSide: BorderSide(color: AppColors.lightGreyColor),
+        borderRadius: BorderRadius.circular(30),
+        borderSide: const BorderSide(color: AppColors.lightGreyColor),
       ),
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(20),
-        borderSide: BorderSide(color: MyOwnColors.blueColor),
+        borderRadius: BorderRadius.circular(30),
+        borderSide: const BorderSide(
+          color: AppColors.orangeColor,
+        ),
       ),
+      hintStyle: GoogleFonts.inter(
+        fontSize: 16,
+        fontWeight: FontWeight.normal,
+        color: AppColors.lightGreyColor,
+      ),
+      floatingLabelStyle: const TextStyle(color: AppColors.whiteColor),
       contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+    ),
+    textSelectionTheme: TextSelectionThemeData(
+      cursorColor: AppColors.lightGreyColor,
+      selectionColor: AppColors.lightGreyColor.withOpacity(0.2),
+      selectionHandleColor: AppColors.lightGreyColor.withOpacity(0.2),
     ),
   );
 }
