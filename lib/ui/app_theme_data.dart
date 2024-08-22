@@ -6,10 +6,9 @@ class AppThemeData {
   static final ThemeData appTheme = ThemeData(
     primaryColor: AppColors.blackColor,
     scaffoldBackgroundColor: AppColors.blackColor,
-    appBarTheme: const AppBarTheme(backgroundColor: AppColors.balckColor),
+    appBarTheme: const AppBarTheme(backgroundColor: AppColors.blackColor),
     splashFactory: NoSplash.splashFactory,
     elevatedButtonTheme: const ElevatedButtonThemeData(
-
         style: ButtonStyle(
             backgroundColor: WidgetStatePropertyAll(AppColors.darkGreyColor))),
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(

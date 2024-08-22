@@ -116,7 +116,7 @@ class WatchListTabState extends State<WatchListTab> {
           style: Theme.of(context).textTheme.titleLarge,
         ),
         elevation: 0,
-        backgroundColor: AppColors.balckColor.withOpacity(0.5),
+        backgroundColor: AppColors.blackColor.withOpacity(0.5),
         surfaceTintColor: Colors.transparent,
       ),
       extendBodyBehindAppBar: true,
