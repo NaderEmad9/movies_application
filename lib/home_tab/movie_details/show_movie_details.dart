@@ -46,18 +46,10 @@ class ShowMovieDetails extends StatelessWidget {
                           fit: BoxFit.fill,
                         ),
                       ),
-                      Positioned(
-                        top: -14.6,
-                        left: -18,
-                        child: IconButton(
-                          onPressed: () {
-                            // Add your onPressed action here
-                          },
-                          icon: Icon(
-                            Icons.bookmark_add_rounded,
-                            color: AppColors.boomMarkAddIconColor.withOpacity(0.8),
-                          ),
-                          iconSize: 50,
+                      InkWell(
+                        onTap: (){},
+                        child: Image.asset(
+                          "assets/images/bookmark.png",
                         ),
                       ),
                     ],

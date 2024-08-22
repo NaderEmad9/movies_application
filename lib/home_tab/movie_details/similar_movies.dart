@@ -35,18 +35,10 @@ class SimilarMovies extends StatelessWidget {
                             width: width * 0.36,
                             fit: BoxFit.fill,
                           ),
-                          Positioned(
-                            top: -13.5,
-                            left: -18,
-                            child: IconButton(
-                              onPressed: () {
-                                // Add your onPressed action here
-                              },
-                              icon: Icon(
-                                Icons.bookmark_add_rounded,
-                                color: Color(0xFF514F4F).withOpacity(0.8),
-                              ),
-                              iconSize: 45,
+                          InkWell(
+                            onTap: (){},
+                            child: Image.asset(
+                              "assets/images/bookmark.png",
                             ),
                           ),
                         ],
