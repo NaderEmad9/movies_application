@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:movies_application/ui/app_colors.dart';
 import 'package:movies_application/model/Category.dart';
 import 'category_item.dart';
 
 class BrowseTab extends StatelessWidget {
   final List<Category> categoryList = Category.getCategory();
+
+  BrowseTab({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +38,8 @@ class BrowseTab extends StatelessWidget {
                 onTap: () {
                   // Callback function
                 },
-                child: CategoryItem(category: categoryList[index], index: index),
+                child:
+                    CategoryItem(category: categoryList[index], index: index),
               );
             },
             itemCount: categoryList.length,
