@@ -34,13 +34,16 @@ class HomeTabState extends State<HomeTab> {
     var releases = AppLocalizations.of(context)!.new_release;
 
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: AppColors.blackColor,
       body: ListView(
         children: [
+          // Container for dark grey area and the image
           Stack(
+            clipBehavior: Clip.none,
             children: [
+              // Dark grey container (video play area)
               Container(
-                height: height * 0.3,
+                height: height * 0.25,
                 color: AppColors.darkGreyColor,
                 child: const Center(
                   child: Icon(
@@ -50,27 +53,25 @@ class HomeTabState extends State<HomeTab> {
                   ),
                 ),
               ),
+              // main poster here
               Positioned(
-                top: height * 0.15,
                 left: width * 0.05,
+                bottom: -height * 0.1,
                 child: Container(
-                  width: width * 0.28,
-                  height: height * 0.2,
+                  width: width * 0.32,
+                  height: height * 0.225,
                   decoration: BoxDecoration(
                     color: AppColors.lightGreyColor,
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(6),
                   ),
                   child: Stack(
                     children: [
                       Center(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: Image.asset(
-                            'assets/images/deadpool.png',
-                            fit: BoxFit.fill,
-                            width: double.infinity,
-                            height: double.infinity,
-                          ),
+                        child: Image.asset(
+                          'assets/images/Dora.png',
+                          fit: BoxFit.fill,
+                          width: double.infinity,
+                          height: double.infinity,
                         ),
                       ),
                       Align(
@@ -94,24 +95,32 @@ class HomeTabState extends State<HomeTab> {
               ),
             ],
           ),
+          // Container el text ( title w dexc)
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: EdgeInsets.only(
+              left: width * 0.4,
+              top: height * 0.045,
+            ), // Adjust padding to position correctly
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Movie title name hyb2a hna",
-                  style: Theme.of(context).textTheme.titleLarge,
+                  "Title finally goes here",
+                  style: Theme.of(context).textTheme.headlineLarge,
                 ),
                 SizedBox(height: height * 0.005),
                 Text(
-                  "Date of release hna and the movie time",
+                  "date w time b2a",
                   style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                      color: AppColors.moviesDetailsColor.withOpacity(0.7)),
+                        color: AppColors.moviesDetailsColor.withOpacity(0.7),
+                      ),
                 ),
               ],
             ),
           ),
+          // Spacer to separate the text from the rest of the content
+          SizedBox(height: height * 0.015),
+          // Content sections
           Content(
             title: releases,
             itemCount: 5,
