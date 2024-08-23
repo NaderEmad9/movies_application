@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 import '../../ui/app_colors.dart';
 
 class ShowMovieDetails extends StatelessWidget {
+  const ShowMovieDetails({super.key});
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
 
     return Container(
-      padding: EdgeInsets.all(15),
-      margin: EdgeInsets.only(top: 7),
+      padding: const EdgeInsets.all(15),
+      margin: const EdgeInsets.only(top: 7),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -17,7 +19,7 @@ class ShowMovieDetails extends StatelessWidget {
             "Dora and the lost city of gold",
             style: Theme.of(context).textTheme.titleMedium,
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Text(
@@ -27,7 +29,7 @@ class ShowMovieDetails extends StatelessWidget {
                 .titleMedium
                 ?.copyWith(color: AppColors.moviesDetailsColor),
           ),
-          SizedBox(
+          const SizedBox(
             height: 18,
           ),
           Row(
@@ -47,7 +49,7 @@ class ShowMovieDetails extends StatelessWidget {
                         ),
                       ),
                       InkWell(
-                        onTap: (){},
+                        onTap: () {},
                         child: Image.asset(
                           "assets/images/bookmark.png",
                         ),
@@ -57,14 +59,14 @@ class ShowMovieDetails extends StatelessWidget {
                 ],
               ),
               Container(
-                margin: EdgeInsets.only(left: 20),
+                margin: const EdgeInsets.only(left: 20),
                 width: width * 0.5,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 8, horizontal: 28),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: 28),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8),
                           border: Border.all(
@@ -91,7 +93,7 @@ class ShowMovieDetails extends StatelessWidget {
                     ),
                     Row(
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.star_rounded,
                           color: AppColors.orangeColor,
                           size: 40,

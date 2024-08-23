@@ -1,11 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../model/Category.dart';
+import '../model/category.dart';
 
 class CategoryItem extends StatelessWidget {
-  Category category;
-  int index;
-  CategoryItem({required this.category, required this.index});
+  final Category category;
+  final int index;
+  const CategoryItem({super.key, required this.category, required this.index});
   @override
   Widget build(BuildContext context) {
     return Stack(

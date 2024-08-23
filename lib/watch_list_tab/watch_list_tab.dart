@@ -133,7 +133,7 @@ class WatchListTabState extends State<WatchListTab> {
                 errorBuilder: (context, error, stackTrace) {
                   return Container(
                     color: Colors.grey,
-                    child: Center(child: Text('Image failed to load')),
+                    child: const Center(child: Text('Image failed to load')),
                   );
                 },
               ),

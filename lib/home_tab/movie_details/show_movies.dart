@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import '../../ui/app_colors.dart';
 
-class ShowMovies extends StatelessWidget{
+class ShowMovies extends StatelessWidget {
+  const ShowMovies({super.key});
+
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
-
     return Stack(
       alignment: Alignment.center,
       children: [
@@ -18,7 +17,7 @@ class ShowMovies extends StatelessWidget{
           onPressed: () {
             // Add your onPressed action here
           },
-          icon: Icon(
+          icon: const Icon(
             Icons.play_circle_filled,
             color: AppColors.whiteColor,
           ),
@@ -27,5 +26,4 @@ class ShowMovies extends StatelessWidget{
       ],
     );
   }
-
 }

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:movies_application/ui/app_colors.dart';
-import 'package:movies_application/model/Category.dart';
+import 'package:movies_application/model/category.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'category_item.dart';
 
 class BrowseTab extends StatelessWidget {
   final List<Category> categoryList = Category.getCategory();
+
+  BrowseTab({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +33,7 @@ class BrowseTab extends StatelessWidget {
               padding: EdgeInsets.symmetric(
                   vertical: height * 0.12,
                   horizontal: width * 0.06), // Adjust padding if needed
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2, // Number of columns
                 crossAxisSpacing: 16, // Horizontal space between items
                 mainAxisSpacing: 16, // Vertical space between items

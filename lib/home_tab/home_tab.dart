@@ -4,13 +4,15 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../ui/app_colors.dart';
 
 class HomeTab extends StatefulWidget {
+  const HomeTab({super.key});
+
   @override
   HomeTabState createState() => HomeTabState();
 }
 
 class HomeTabState extends State<HomeTab> {
   bool _isTopContainerBookmarked = false;
-  Map<int, bool> _bookmarkedItems = {};
+  final Map<int, bool> _bookmarkedItems = {};
 
   void _handleTopContainerBookmarkChange() {
     setState(() {

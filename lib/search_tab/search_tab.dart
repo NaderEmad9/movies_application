@@ -3,6 +3,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:movies_application/ui/app_colors.dart';
 
 class SearchTab extends StatefulWidget {
+  const SearchTab({super.key});
+
   @override
   State<SearchTab> createState() => _SearchTabState();
 }
@@ -23,7 +25,7 @@ class _SearchTabState extends State<SearchTab> {
         title: TextFormField(
           style: Theme.of(context).textTheme.headlineLarge,
           decoration: InputDecoration(
-            prefixIcon: Icon(Icons.search),
+            prefixIcon: const Icon(Icons.search),
             fillColor: AppColors.darkGreyColor,
             filled: true,
             hintText: searching,

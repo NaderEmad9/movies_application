@@ -19,10 +19,10 @@ class MyApp extends StatelessWidget {
       theme: AppThemeData.appTheme,
       debugShowCheckedModeBanner: false,
       initialRoute: AppScreen.routeName,
-      locale: Locale('en'),
+      locale: const Locale('en'),
       routes: {
         AppScreen.routeName: (context) => const AppScreen(),
-        MovieDetailsScreen.routeName: (context) => MovieDetailsScreen(),
+        MovieDetailsScreen.routeName: (context) => const MovieDetailsScreen(),
       },
     );
   }
