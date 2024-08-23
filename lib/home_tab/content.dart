@@ -58,13 +58,14 @@ class ContentState extends State<Content> {
                   child: Stack(
                     children: [
                       Container(
-                        width: width * 0.27,
+                        width: width * 0.235,
+                        height: height * 0.143,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Center(
                           child: Image.asset(
-                            'assets/images/deadpool.png',
+                            'assets/images/Dora.png',
                             fit: BoxFit.fill,
                             width: double.infinity,
                             height: double.infinity,
@@ -97,7 +98,7 @@ class ContentState extends State<Content> {
                         left: 0,
                         right: 0,
                         child: Container(
-                          color: Colors.black.withOpacity(0.8),
+                          color: Colors.black.withOpacity(0.5),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             mainAxisAlignment: MainAxisAlignment.center,
