@@ -42,7 +42,7 @@ class DialogUtils {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
             ),
-            title: Center(child: const CircularProgressIndicator()),
+            title: const Center(child: CircularProgressIndicator()),
             content: Padding(
               padding: const EdgeInsets.only(top: 16),
               child: Text(
