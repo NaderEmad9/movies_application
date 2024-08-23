@@ -29,7 +29,7 @@ class MovieDetailsScreen extends StatelessWidget {
             Container(
               height: 375,
               margin: const EdgeInsets.only(top: 15, bottom: 60),
-              color: AppColors.moreLikeThisBackgroundColor,
+              color: AppColors.lightGreyColor,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
