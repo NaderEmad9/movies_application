@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movies_application/ui/app_colors.dart';
-import 'package:movies_application/model/Category.dart';
+import 'package:movies_application/model/category.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'category_item.dart';
 
