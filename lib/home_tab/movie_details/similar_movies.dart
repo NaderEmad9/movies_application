@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../../ui/app_colors.dart';
 
 class SimilarMovies extends StatelessWidget {
+  const SimilarMovies({super.key});
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -12,7 +14,7 @@ class SimilarMovies extends StatelessWidget {
         itemCount: 6,
         itemBuilder: (context, int index) {
           return Container(
-            margin: EdgeInsets.only(left: 20),
+            margin: const EdgeInsets.only(left: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -36,7 +38,7 @@ class SimilarMovies extends StatelessWidget {
                             fit: BoxFit.fill,
                           ),
                           InkWell(
-                            onTap: (){},
+                            onTap: () {},
                             child: Image.asset(
                               "assets/images/bookmark.png",
                             ),
@@ -47,13 +49,13 @@ class SimilarMovies extends StatelessWidget {
                         height: height * 0.01,
                       ),
                       Container(
-                        margin: EdgeInsets.only(left: 9),
+                        margin: const EdgeInsets.only(left: 9),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
                               children: [
-                                Icon(
+                                const Icon(
                                   Icons.star_rounded,
                                   color: AppColors.orangeColor,
                                   size: 25,
@@ -67,7 +69,7 @@ class SimilarMovies extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 5,
                             ),
                             Text(
@@ -77,7 +79,7 @@ class SimilarMovies extends StatelessWidget {
                                   .bodySmall!
                                   .copyWith(color: AppColors.whiteColor),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 5,
                             ),
                             Text(

@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
+// ignore: library_prefixes
 import 'package:fluent_ui/fluent_ui.dart' as Fluent;
+import 'package:flutter/material.dart';
 import 'package:movies_application/browse_tab/browse_tab.dart';
 import 'package:movies_application/home_tab/home_tab.dart';
 import 'package:movies_application/search_tab/search_tab.dart';
@@ -40,19 +41,19 @@ class _AppScreenState extends State<AppScreen> {
           },
           items: [
             BottomNavigationBarItem(
-              icon: Icon(Fluent.FluentIcons.home),
+              icon: const Icon(Fluent.FluentIcons.home),
               label: homeText,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Fluent.FluentIcons.video_search),
+              icon: const Icon(Fluent.FluentIcons.video_search),
               label: searchText,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Fluent.FluentIcons.my_movies_t_v),
+              icon: const Icon(Fluent.FluentIcons.my_movies_t_v),
               label: browseText,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Fluent.FluentIcons.favorite_list),
+              icon: const Icon(Fluent.FluentIcons.favorite_list),
               label: watchListText,
             ),
           ],
@@ -61,5 +62,10 @@ class _AppScreenState extends State<AppScreen> {
     );
   }
 
-  List<Widget> tabs = [HomeTab(), SearchTab(), BrowseTab(), WatchListTab()];
+  List<Widget> tabs = [
+    const HomeTab(),
+    const SearchTab(),
+    BrowseTab(),
+    const WatchListTab()
+  ];
 }

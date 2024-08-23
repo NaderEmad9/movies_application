@@ -7,10 +7,10 @@ import '../../ui/app_colors.dart';
 class MovieDetailsScreen extends StatelessWidget {
   static const String routeName = "movie_details_screen";
 
+  const MovieDetailsScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.navigationBarColor,
@@ -24,17 +24,17 @@ class MovieDetailsScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ShowMovies(),
-            ShowMovieDetails(),
+            const ShowMovies(),
+            const ShowMovieDetails(),
             Container(
               height: 375,
-              margin: EdgeInsets.only(top: 15, bottom: 60),
+              margin: const EdgeInsets.only(top: 15, bottom: 60),
               color: AppColors.moreLikeThisBackgroundColor,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    margin: EdgeInsets.only(left: 22, top: 20),
+                    margin: const EdgeInsets.only(left: 22, top: 20),
                     child: Text(
                       "More Like This",
                       style: Theme.of(context)
@@ -43,7 +43,7 @@ class MovieDetailsScreen extends StatelessWidget {
                           .copyWith(fontWeight: FontWeight.w900),
                     ),
                   ),
-                  Expanded(child: SimilarMovies()),
+                  const Expanded(child: SimilarMovies()),
                 ],
               ),
             ),
