@@ -58,6 +58,7 @@ class ContentState extends State<Content> {
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: Stack(
                     children: [
+
                       InkWell(
                         onTap: (){
                           Navigator.pushNamed(context, MovieDetailsScreen.routeName);
@@ -74,6 +75,7 @@ class ContentState extends State<Content> {
                               width: double.infinity,
                               height: double.infinity,
                             ),
+
                           ),
                         ),
                       ),
@@ -103,7 +105,7 @@ class ContentState extends State<Content> {
                         left: 0,
                         right: 0,
                         child: Container(
-                          color: Colors.black.withOpacity(0.8),
+                          color: Colors.black.withOpacity(0.5),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             mainAxisAlignment: MainAxisAlignment.center,
