@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../ui/app_colors.dart';
+import 'movie_details/movie_details_screen.dart';
 
 class Content extends StatefulWidget {
   final String title;
@@ -57,17 +58,22 @@ class ContentState extends State<Content> {
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: Stack(
                     children: [
-                      Container(
-                        width: width * 0.27,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Center(
-                          child: Image.asset(
-                            'assets/images/deadpool.png',
-                            fit: BoxFit.fill,
-                            width: double.infinity,
-                            height: double.infinity,
+                      InkWell(
+                        onTap: (){
+                          Navigator.pushNamed(context, MovieDetailsScreen.routeName);
+                        },
+                        child: Container(
+                          width: width * 0.27,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Center(
+                            child: Image.asset(
+                              'assets/images/deadpool.png',
+                              fit: BoxFit.fill,
+                              width: double.infinity,
+                              height: double.infinity,
+                            ),
                           ),
                         ),
                       ),

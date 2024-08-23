@@ -6,7 +6,9 @@ class AppThemeData {
   static final ThemeData appTheme = ThemeData(
     primaryColor: AppColors.blackColor,
     scaffoldBackgroundColor: AppColors.blackColor,
-    appBarTheme: const AppBarTheme(backgroundColor: AppColors.blackColor),
+    appBarTheme: const AppBarTheme(
+        backgroundColor: AppColors.blackColor,
+        iconTheme: IconThemeData(color: AppColors.whiteColor)),
     splashFactory: NoSplash.splashFactory,
     elevatedButtonTheme: const ElevatedButtonThemeData(
         style: ButtonStyle(
