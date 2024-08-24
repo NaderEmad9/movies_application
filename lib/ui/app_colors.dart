@@ -5,7 +5,11 @@ class AppColors {
   static const Color lightGreyColor =
       Color(0xffCBCBCB); // for labels and unselected tabs
   static const Color darkGreyColor = Color(
-      0xff514F4F); // background for (more like this, New releases, Recomended)
+      0xff514F4F); // background for (more like this, New releases, Recommended)
+  static const Color moreLikeThisBackgroundColor = Color(
+      0xff282A28); // background color for moreLikeThisBackgroundColorContainer
+  static const Color moreLikeThisForGroundColor = Color(
+      0xff343534); // background color for moreLikeThisForGroundColorContainer
   static const Color navigationBarColor =
       Color(0xff1A1A1A); // this color only used with the bottom navigation bar
   static const Color whiteColor = Color(0xffFFFFFF);

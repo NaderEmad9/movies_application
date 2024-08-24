@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
-import '../../ui/app_colors.dart';
+import '../../../ui/app_colors.dart';
 
-class SimilarMovies extends StatelessWidget {
-  const SimilarMovies({super.key});
+class SimilarMovies extends StatefulWidget
+{
+  @override
+  State<SimilarMovies> createState() => _SimilarMoviesState();
+}
+
+class _SimilarMoviesState extends State<SimilarMovies> {
+  List<bool> isBookmarked = List.generate(6, (index) => false);
 
   @override
   Widget build(BuildContext context) {
@@ -20,12 +26,12 @@ class SimilarMovies extends StatelessWidget {
               children: [
                 Container(
                   decoration: BoxDecoration(
-                      color: AppColors.darkGreyColor,
+                      color: AppColors.moreLikeThisForGroundColor,
                       borderRadius: BorderRadius.circular(7)),
                   margin: EdgeInsets.only(
-                      bottom: height * 0.035, top: height * 0.027),
-                  height: height * 0.363,
-                  width: width * 0.36,
+                      top: height * 0.027),
+                  height: height * 0.34,
+                  width: width * 0.31,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -33,14 +39,29 @@ class SimilarMovies extends StatelessWidget {
                         children: [
                           Image.asset(
                             "assets/images/Image.png",
-                            height: height * 0.25,
-                            width: width * 0.36,
+                            height: height * 0.22,
+                            width: width * 0.31,
                             fit: BoxFit.fill,
                           ),
-                          InkWell(
-                            onTap: () {},
-                            child: Image.asset(
-                              "assets/images/bookmark.png",
+                          Positioned(
+                            top: -14,
+                            left: -15.5,
+                            child: IconButton(
+                              onPressed: () {
+                                isBookmarked[index] = !isBookmarked[index];
+                                setState(() {});
+                              },
+                              icon: isBookmarked[index]
+                                  ? const Icon(
+                                Icons.bookmark_added,
+                                color: AppColors.orangeColor,
+                                size: 25,
+                              )
+                                  : const Icon(
+                                Icons.bookmark_add_outlined,
+                                color: AppColors.whiteColor,
+                                size: 25,
+                              ),
                             ),
                           ),
                         ],
@@ -88,7 +109,7 @@ class SimilarMovies extends StatelessWidget {
                                   .textTheme
                                   .labelSmall!
                                   .copyWith(
-                                      color: AppColors.moviesDetailsColor),
+                                  color: AppColors.moviesDetailsColor),
                             ),
                           ],
                         ),

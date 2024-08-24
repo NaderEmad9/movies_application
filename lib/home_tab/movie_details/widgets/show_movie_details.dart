@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
-import '../../ui/app_colors.dart';
+import '../../../ui/app_colors.dart';
 
-class ShowMovieDetails extends StatelessWidget {
-  const ShowMovieDetails({super.key});
+class ShowMovieDetails extends StatefulWidget {
+  @override
+  State<ShowMovieDetails> createState() => _ShowMovieDetailsState();
+}
+
+class _ShowMovieDetailsState extends State<ShowMovieDetails> {
+  bool isBookmarked = false;
 
   @override
   Widget build(BuildContext context) {
@@ -43,15 +48,30 @@ class ShowMovieDetails extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8),
                         child: Image.asset(
                           "assets/images/Image.png",
-                          width: width * 0.37,
+                          width: width * 0.32,
                           height: height * 0.3,
                           fit: BoxFit.fill,
                         ),
                       ),
-                      InkWell(
-                        onTap: () {},
-                        child: Image.asset(
-                          "assets/images/bookmark.png",
+                      Positioned(
+                        top: -12.5,
+                        left: -14,
+                        child: IconButton(
+                            onPressed: () {
+                              isBookmarked = !isBookmarked;
+                              setState(() {});
+                            },
+                            icon: isBookmarked
+                                ? const Icon(
+                              Icons.bookmark_added,
+                              color: AppColors.orangeColor,
+                              size: 40,
+                            )
+                                : const Icon(
+                              Icons.bookmark_add_outlined,
+                              color: AppColors.whiteColor,
+                              size: 40,
+                            ),
                         ),
                       ),
                     ],
@@ -60,7 +80,7 @@ class ShowMovieDetails extends StatelessWidget {
               ),
               Container(
                 margin: const EdgeInsets.only(left: 20),
-                width: width * 0.5,
+                width: width *0.43,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
