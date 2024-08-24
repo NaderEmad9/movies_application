@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movies_application/home_tab/content.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:movies_application/home_tab/movie_details/screen/movie_details_screen.dart';
 import '../ui/app_colors.dart';
 
 class HomeTab extends StatefulWidget {
@@ -42,14 +43,19 @@ class HomeTabState extends State<HomeTab> {
             clipBehavior: Clip.none,
             children: [
               // Dark grey container (video play area)
-              Container(
-                height: height * 0.25,
-                color: AppColors.darkGreyColor,
-                child: const Center(
-                  child: Icon(
-                    Icons.play_circle_filled,
-                    size: 64,
-                    color: AppColors.whiteColor,
+              InkWell(
+                onTap: () {
+                  Navigator.pushNamed(context, MovieDetailsScreen.routeName);
+                },
+                child: Container(
+                  height: height * 0.25,
+                  color: AppColors.darkGreyColor,
+                  child: const Center(
+                    child: Icon(
+                      Icons.play_circle_filled,
+                      size: 64,
+                      color: AppColors.whiteColor,
+                    ),
                   ),
                 ),
               ),
@@ -67,11 +73,16 @@ class HomeTabState extends State<HomeTab> {
                   child: Stack(
                     children: [
                       Center(
-                        child: Image.asset(
-                          'assets/images/Dora.png',
-                          fit: BoxFit.fill,
-                          width: double.infinity,
-                          height: double.infinity,
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.pushNamed(context, MovieDetailsScreen.routeName);
+                          },
+                          child: Image.asset(
+                            'assets/images/Dora.png',
+                            fit: BoxFit.fill,
+                            width: double.infinity,
+                            height: double.infinity,
+                          ),
                         ),
                       ),
                       Align(

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:movies_application/home_tab/movie_details/show_movie_details.dart';
-import 'package:movies_application/home_tab/movie_details/show_movies.dart';
-import 'package:movies_application/home_tab/movie_details/similar_movies.dart';
-import '../../ui/app_colors.dart';
+import 'package:movies_application/home_tab/movie_details/widgets/show_movie_details.dart';
+import 'package:movies_application/home_tab/movie_details/widgets/show_movies.dart';
+import 'package:movies_application/home_tab/movie_details/widgets/similar_movies.dart';
+import '../../../ui/app_colors.dart';
 
 class MovieDetailsScreen extends StatelessWidget {
   static const String routeName = "movie_details_screen";
@@ -11,6 +11,9 @@ class MovieDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.navigationBarColor,
@@ -25,11 +28,11 @@ class MovieDetailsScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const ShowMovies(),
-            const ShowMovieDetails(),
+            ShowMovieDetails(),
             Container(
-              height: 375,
-              margin: const EdgeInsets.only(top: 15, bottom: 60),
-              color: AppColors.lightGreyColor,
+              height: height*0.46,
+              margin: EdgeInsets.only(top: 15, bottom: height*0.07),
+              color: AppColors.moreLikeThisBackgroundColor,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -43,7 +46,7 @@ class MovieDetailsScreen extends StatelessWidget {
                           .copyWith(fontWeight: FontWeight.w900),
                     ),
                   ),
-                  const Expanded(child: SimilarMovies()),
+                  Expanded(child: SimilarMovies()),
                 ],
               ),
             ),

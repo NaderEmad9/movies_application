@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../ui/app_colors.dart';
+import '../../../ui/app_colors.dart';
 
 class ShowMovies extends StatelessWidget {
   const ShowMovies({super.key});
