@@ -122,41 +122,41 @@ class ApiManager {
     }
   }
 
-  static Future<HttpResponse<DetailsMovieResponse>> getDetailsMovie(
-      int movieId) async {
-    Uri url = Uri.parse('/3/movie/$movieId');
+  // static Future<HttpResponse<DetailsMovieResponse>> getDetailsMovie(
+  //     int movieId) async {
+  //   Uri url = Uri.parse('/3/movie/$movieId');
 
-    try {
-      var response = await http.get(url, headers: {
-        "Authorization":
-            'Bearer ${ApiConstant.token}', // Bearer token for authorization
-        "accept": 'application/json',
-      });
+  //   try {
+  //     var response = await http.get(url, headers: {
+  //       "Authorization":
+  //           'Bearer ${ApiConstant.token}', // Bearer token for authorization
+  //       "accept": 'application/json',
+  //     });
 
-      var responseBody = response.body;
-      var json = jsonDecode(responseBody);
-      return DetailsMovieResponse.fromJson(json);
-    } catch (e) {
-      throw e;
-    }
-  }
+  //     var responseBody = response.body;
+  //     var json = jsonDecode(responseBody);
+  //     return DetailsMovieResponse.fromJson(json);
+  //   } catch (e) {
+  //     throw e;
+  //   }
+  // }
 
-  static Future<HttpResponse<SimilarMoviesResponse>> getSimilarMovies(
-      int movieId) async {
-    Uri url = Uri.parse('/3/movie/$movieId/similar');
+  // static Future<HttpResponse<SimilarMoviesResponse>> getSimilarMovies(
+  //     int movieId) async {
+  //   Uri url = Uri.parse('/3/movie/$movieId/similar');
 
-    try {
-      var response = await http.get(url, headers: {
-        "Authorization":
-            'Bearer ${ApiConstant.token}', // Bearer token for authorization
-        "accept": 'application/json',
-      });
+  //   try {
+  //     var response = await http.get(url, headers: {
+  //       "Authorization":
+  //           'Bearer ${ApiConstant.token}', // Bearer token for authorization
+  //       "accept": 'application/json',
+  //     });
 
-      var responseBody = response.body;
-      var json = jsonDecode(responseBody);
-      return SimilarMoviesResponse.fromJson(json);
-    } catch (e) {
-      throw e;
-    }
-  }
+  //     var responseBody = response.body;
+  //     var json = jsonDecode(responseBody);
+  //     return SimilarMoviesResponse.fromJson(json);
+  //   } catch (e) {
+  //     throw e;
+  //   }
+  // }
 }
