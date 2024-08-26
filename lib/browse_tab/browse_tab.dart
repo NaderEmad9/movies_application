@@ -1,54 +1,60 @@
 import 'package:flutter/material.dart';
+import 'package:movies_application/browse_tab/category_item.dart';
 import 'package:movies_application/ui/app_colors.dart';
-import 'package:movies_application/model/category.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'category_item.dart';
+import 'package:movies_application/model/GenresResponse.dart';
+import 'package:movies_application/api/api_manager.dart';
 
 class BrowseTab extends StatelessWidget {
-  final List<Category> categoryList = Category.getCategory();
-
   BrowseTab({super.key});
 
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
-    var category = AppLocalizations.of(context)!.category;
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: false,
-        title: Text(
-          category,
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
-        elevation: 0,
-        backgroundColor: AppColors.blackColor.withOpacity(0.5),
-        surfaceTintColor: Colors.transparent,
-      ),
-      extendBodyBehindAppBar: true,
-      body: Column(
-        children: [
-          Expanded(
-            child: GridView.builder(
-              padding: EdgeInsets.symmetric(
-                  vertical: height * 0.12,
-                  horizontal: width * 0.06), // Adjust padding if needed
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, // Number of columns
-                crossAxisSpacing: 16, // Horizontal space between items
-                mainAxisSpacing: 16, // Vertical space between items
-                childAspectRatio:
-                    1.5, // Aspect ratio of each item (width/height)
+    return FutureBuilder<HttpResponse<GenresResponse>>(
+      future: ApiManager.getGenreMovieApi(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError || snapshot.data?.statusCode != 200) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text('Something went wrong'),
+              TextButton(onPressed: () {}, child: const Text('Try again')),
+            ],
+          );
+        } else {
+          var genresList = snapshot.data?.data.genres ?? [];
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(
+                AppLocalizations.of(context)!.category,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
-              itemCount: categoryList.length,
+              elevation: 0,
+              backgroundColor: AppColors.blackColor.withOpacity(0.5),
+              surfaceTintColor: Colors.transparent,
+            ),
+            extendBodyBehindAppBar: true,
+            body: GridView.builder(
+              padding: EdgeInsets.symmetric(
+                vertical: MediaQuery.of(context).size.height * 0.12,
+                horizontal: MediaQuery.of(context).size.width * 0.06,
+              ),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
+                childAspectRatio: 1.5,
+              ),
+              itemCount: genresList.length,
               itemBuilder: (context, index) {
-                return CategoryItem(
-                    category: categoryList[index], index: index);
+                return CategoryItem(genres: genresList[index]);
               },
             ),
-          ),
-        ],
-      ),
+          );
+        }
+      },
     );
   }
 }

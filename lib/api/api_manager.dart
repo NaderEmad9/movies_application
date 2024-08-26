@@ -7,87 +7,119 @@ import 'package:movies_application/model/PopularResponse.dart';
 import 'package:movies_application/model/SearchResponse.dart';
 import 'package:movies_application/model/TopRatedResponse.dart';
 import 'api_constant.dart';
+import 'dart:io';
 
 ///https://api.themoviedb.org/3/movie/popular?api_key=28499bb843e6223bb89df9a57661cd222c
+class HttpResponse<T> {
+  final T data;
+  final int statusCode;
+  HttpResponse(this.data, this.statusCode);
+}
 
 class ApiManager {
-  static Future<PopularResponse?> getPopularMovies() async {
-    Uri url = Uri.https(ApiConstant.baseUrl, ApiConstant.popularMoviesApi,
-        {'apiKey': ApiConstant.apiKey});
-    var response = await http.get(url);
+  static Future<HttpResponse<PopularResponse>> getPopularMovies() async {
+    Uri url = Uri.parse('https://api.themoviedb.org/3/movie/popular');
+    var response = await http.get(url, headers: {
+      "Authorization": 'Bearer ${ApiConstant.token}',
+      "accept": 'application/json',
+    });
+    int status = response.statusCode;
     try {
-      var responseBody = response.body; //string
-      var json = jsonDecode(responseBody); //json
-      return PopularResponse.fromJson(json);
+      var responseBody = response.body;
+      var json = jsonDecode(responseBody);
+      var popularResponse = PopularResponse.fromJson(json);
+      return HttpResponse(popularResponse, status);
     } catch (e) {
-      throw e;
+      return HttpResponse(PopularResponse(), 500);
     }
   }
 
-  static Future<NewReleaseResponse?> getNewReleasesMoviesApi() async {
-    Uri url = Uri.https(ApiConstant.baseUrl, ApiConstant.newReleasesMoviesApi,
-        {'apiKey': ApiConstant.apiKey});
-    var response = await http.get(url);
+  static Future<HttpResponse<NewReleaseResponse>>
+      getNewReleasesMoviesApi() async {
+    Uri url = Uri.parse('https://api.themoviedb.org/3/movie/new_releases');
+    var response = await http.get(url, headers: {
+      "Authorization": 'Bearer ${ApiConstant.token}',
+      "accept": 'application/json',
+    });
+    int status = response.statusCode;
     try {
-      var responseBody = response.body; //string
-      var json = jsonDecode(responseBody); //json
-      return NewReleaseResponse.fromJson(json);
+      var responseBody = response.body;
+      var json = jsonDecode(responseBody);
+      var newReleaseResponse = NewReleaseResponse.fromJson(json);
+      return HttpResponse(newReleaseResponse, status);
     } catch (e) {
-      throw e;
+      return HttpResponse(NewReleaseResponse(), 500);
     }
   }
 
-  static Future<TopRatedResponse?> getTopRatedMoviesApi() async {
-    Uri url = Uri.https(ApiConstant.baseUrl, ApiConstant.topRatedMoviesApi,
-        {'apiKey': ApiConstant.apiKey});
-    var response = await http.get(url);
+  static Future<HttpResponse<TopRatedResponse>> getTopRatedMoviesApi() async {
+    Uri url = Uri.parse('https://api.themoviedb.org/3/movie/top_rated');
+    var response = await http.get(url, headers: {
+      "Authorization": 'Bearer ${ApiConstant.token}',
+      "accept": 'application/json',
+    });
+    int status = response.statusCode;
     try {
-      var responseBody = response.body; //string
-      var json = jsonDecode(responseBody); //json
-      return TopRatedResponse.fromJson(json);
+      var responseBody = response.body;
+      var json = jsonDecode(responseBody);
+      var topRatedResponse = TopRatedResponse.fromJson(json);
+      return HttpResponse(topRatedResponse, status);
     } catch (e) {
-      throw e;
+      return HttpResponse(TopRatedResponse(), 500);
     }
   }
 
-  static Future<SearchResponse?> getSearchMovieApi(String searchId) async {
-    Uri url = Uri.https(ApiConstant.baseUrl, ApiConstant.searchMovieApi,
-        {'apiKey': ApiConstant.apiKey,
-        'query': searchId
-        });
-    var response = await http.get(url);
+  static Future<HttpResponse<SearchResponse>> getSearchMovieApi(
+      String searchId) async {
+    Uri url =
+        Uri.parse('https://api.themoviedb.org/3/search/movie?query=$searchId');
+    var response = await http.get(url, headers: {
+      "Authorization": 'Bearer ${ApiConstant.token}',
+      "accept": 'application/json',
+    });
+    int status = response.statusCode;
     try {
-      var responseBody = response.body; //string
-      var json = jsonDecode(responseBody); //json
-      return SearchResponse.fromJson(json);
+      var responseBody = response.body;
+      var json = jsonDecode(responseBody);
+      var searchResponse = SearchResponse.fromJson(json);
+      return HttpResponse(searchResponse, status);
     } catch (e) {
-      throw e;
+      return HttpResponse(SearchResponse(), 500);
     }
   }
 
-  static Future<GenresResponse?> getGenreMovieApi() async {
-    Uri url = Uri.https(ApiConstant.baseUrl, ApiConstant.genreMovieApi,
-        {'apiKey': ApiConstant.apiKey});
-    var response = await http.get(url);
+  static Future<HttpResponse<GenresResponse>> getGenreMovieApi() async {
+    Uri url = Uri.parse('https://api.themoviedb.org/3/genre/movie/list');
+    var response = await http.get(url, headers: {
+      "Authorization": 'Bearer ${ApiConstant.token}',
+      "accept": 'application/json',
+    });
+    int status = response.statusCode;
+
     try {
-      var responseBody = response.body; //string
-      var json = jsonDecode(responseBody); //json
-      return GenresResponse.fromJson(json);
+      var responseBody = response.body;
+      var json = jsonDecode(responseBody);
+      var genresResponse = GenresResponse.fromJson(json);
+      return HttpResponse(genresResponse, status);
     } catch (e) {
-      throw e;
+      return HttpResponse(GenresResponse(), 500);
     }
   }
 
-  static Future<DiscoverResponse?> getDiscoverMovieApi() async {
-    Uri url = Uri.https(ApiConstant.baseUrl, ApiConstant.discoverMovieApi,
-        {'apiKey': ApiConstant.apiKey});
-    var response = await http.get(url);
+  static Future<HttpResponse<DiscoverResponse>> getDiscoverMovieApi() async {
+    Uri url = Uri.parse('https://api.themoviedb.org/3/discover/movie');
+    var response = await http.get(url, headers: {
+      "Authorization": 'Bearer ${ApiConstant.token}',
+      "accept": 'application/json',
+    });
+    int status = response.statusCode;
     try {
-      var responseBody = response.body; //string
-      var json = jsonDecode(responseBody); //json
-      return DiscoverResponse.fromJson(json);
+      var responseBody = response.body;
+      var json = jsonDecode(responseBody);
+      var discoverResponse = DiscoverResponse.fromJson(json);
+      return HttpResponse(discoverResponse, status);
     } catch (e) {
-      throw e;
+      return HttpResponse(DiscoverResponse(), 500);
     }
   }
 }

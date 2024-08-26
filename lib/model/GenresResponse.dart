@@ -4,7 +4,7 @@ class GenresResponse {
   GenresResponse({this.genres, this.status, this.code, this.message});
 
   GenresResponse.fromJson(dynamic json) {
-    status = json['status'];
+    status = status;
     code = json['code'];
     message = json['message'];
     if (json['genres'] != null) {

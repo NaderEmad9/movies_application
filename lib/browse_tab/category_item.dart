@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import '../model/category.dart';
+import 'package:movies_application/model/GenresResponse.dart';
 
+// ignore: must_be_immutable
 class CategoryItem extends StatelessWidget {
-  final Category category;
-  final int index;
-  const CategoryItem({super.key, required this.category, required this.index});
+  Genres genres;
+  CategoryItem({super.key, required this.genres});
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -14,7 +14,7 @@ class CategoryItem extends StatelessWidget {
         ),
         Center(
             child: Text(
-          category.name,
+          genres.name ?? '',
           style: Theme.of(context).textTheme.titleSmall,
         )),
       ],
