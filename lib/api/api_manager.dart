@@ -71,8 +71,7 @@ class ApiManager {
 
   static Future<HttpResponse<SearchResponse>> getSearchMovieApi(
       String searchId) async {
-    Uri url =
-        Uri.parse('https://api.themoviedb.org/3/search/movie?query=$searchId');
+    Uri url = Uri.parse('/3/search/movie');
     var response = await http.get(url, headers: {
       "Authorization": 'Bearer ${ApiConstant.token}',
       "accept": 'application/json',
@@ -89,7 +88,7 @@ class ApiManager {
   }
 
   static Future<HttpResponse<GenresResponse>> getGenreMovieApi() async {
-    Uri url = Uri.parse('https://api.themoviedb.org/3/genre/movie/list');
+    Uri url = Uri.parse(ApiConstant.genreMovieApi);
     var response = await http.get(url, headers: {
       "Authorization": 'Bearer ${ApiConstant.token}',
       "accept": 'application/json',
@@ -107,7 +106,7 @@ class ApiManager {
   }
 
   static Future<HttpResponse<DiscoverResponse>> getDiscoverMovieApi() async {
-    Uri url = Uri.parse('https://api.themoviedb.org/3/discover/movie');
+    Uri url = Uri.parse('/3/discover/movie');
     var response = await http.get(url, headers: {
       "Authorization": 'Bearer ${ApiConstant.token}',
       "accept": 'application/json',
@@ -120,6 +119,44 @@ class ApiManager {
       return HttpResponse(discoverResponse, status);
     } catch (e) {
       return HttpResponse(DiscoverResponse(), 500);
+    }
+  }
+
+  static Future<HttpResponse<DetailsMovieResponse>> getDetailsMovie(
+      int movieId) async {
+    Uri url = Uri.parse('/3/movie/$movieId');
+
+    try {
+      var response = await http.get(url, headers: {
+        "Authorization":
+            'Bearer ${ApiConstant.token}', // Bearer token for authorization
+        "accept": 'application/json',
+      });
+
+      var responseBody = response.body;
+      var json = jsonDecode(responseBody);
+      return DetailsMovieResponse.fromJson(json);
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  static Future<HttpResponse<SimilarMoviesResponse>> getSimilarMovies(
+      int movieId) async {
+    Uri url = Uri.parse('/3/movie/$movieId/similar');
+
+    try {
+      var response = await http.get(url, headers: {
+        "Authorization":
+            'Bearer ${ApiConstant.token}', // Bearer token for authorization
+        "accept": 'application/json',
+      });
+
+      var responseBody = response.body;
+      var json = jsonDecode(responseBody);
+      return SimilarMoviesResponse.fromJson(json);
+    } catch (e) {
+      throw e;
     }
   }
 }
