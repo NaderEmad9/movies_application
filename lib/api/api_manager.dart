@@ -88,7 +88,10 @@ class ApiManager {
   }
 
   static Future<HttpResponse<GenresResponse>> getGenreMovieApi() async {
-    Uri url = Uri.parse(ApiConstant.genreMovieApi);
+    Uri url = Uri(
+        scheme: ApiConstant.scheme,
+        host: ApiConstant.host,
+        path: ApiConstant.genreMoviepath);
     var response = await http.get(url, headers: {
       "Authorization": 'Bearer ${ApiConstant.token}',
       "accept": 'application/json',
