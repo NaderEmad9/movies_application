@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:carousel_slider/carousel_slider.dart'; // استيراد الحزمة
+import 'package:movies_application/api/api_manager.dart';
 import 'package:movies_application/home_tab/content.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:movies_application/home_tab/movie_details/screen/movie_details_screen.dart';
+import '../model/PopularResponse.dart';
 import '../ui/app_colors.dart';
 
 class HomeTab extends StatefulWidget {
@@ -38,113 +41,178 @@ class HomeTabState extends State<HomeTab> {
       backgroundColor: AppColors.blackColor,
       body: ListView(
         children: [
-          // Container for dark grey area and the image
-          Stack(
-            clipBehavior: Clip.none,
-            children: [
-              // Dark grey container (video play area)
-              InkWell(
-                onTap: () {
-                  Navigator.pushNamed(context, MovieDetailsScreen.routeName);
-                },
-                child: Container(
-                  height: height * 0.25,
-                  color: AppColors.darkGreyColor,
-                  child: const Center(
-                    child: Icon(
-                      Icons.play_circle_filled,
-                      size: 64,
-                      color: AppColors.whiteColor,
+          FutureBuilder<HttpResponse<PopularResponse>>(
+            future: ApiManager.getPopularMovies(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(
+                    color: AppColors.whiteColor,
+                  ),
+                );
+              } else if (snapshot.hasError || snapshot.data?.statusCode != 200) {
+                return Column(
+                  children: [
+                    const Text('Something went wrong'),
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {}); // Rebuild to retry fetching data
+                      },
+                      child: const Text('Try again'),
                     ),
-                  ),
-                ),
-              ),
-              // main poster here
-              Positioned(
-                left: width * 0.05,
-                bottom: -height * 0.1,
-                child: Container(
-                  width: width * 0.32,
-                  height: height * 0.225,
-                  decoration: BoxDecoration(
-                    color: AppColors.lightGreyColor,
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: Stack(
-                    children: [
-                      Center(
-                        child: InkWell(
+                  ],
+                );
+              } else if (snapshot.hasData &&
+                  snapshot.data?.data.results != null &&
+                  snapshot.data!.data.results!.isNotEmpty) {
+                var movies = snapshot.data!.data.results!;
+
+                return Column(
+                  children: [
+                    // CarouselSlider for popular movies
+                    CarouselSlider.builder(
+                      itemCount: movies.length,
+                      itemBuilder: (context, index, realIndex) {
+                        var movie = movies[index];
+                        var imageUrl = 'https://image.tmdb.org/t/p/w500${movie.posterPath}';
+
+                        return InkWell(
                           onTap: () {
                             Navigator.pushNamed(context, MovieDetailsScreen.routeName);
                           },
-                          child: Image.asset(
-                            'assets/images/Dora.png',
-                            fit: BoxFit.fill,
-                            width: double.infinity,
-                            height: double.infinity,
-                          ),
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: IconButton(
-                          icon: _isTopContainerBookmarked
-                              ? const Icon(
-                                  Icons.bookmark_added,
-                                  color: AppColors.orangeColor,
-                                )
-                              : const Icon(
-                                  Icons.bookmark_add_outlined,
+                          child: Stack(
+                            clipBehavior: Clip.none,
+                            children: [
+                              // Background image
+                              Positioned.fill(
+                                child: Image.network(
+                                  imageUrl,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              // Play icon centered
+                              Center(
+                                child: Icon(
+                                  Icons.play_circle_filled,
+                                  size: 64,
                                   color: AppColors.whiteColor,
                                 ),
-                          onPressed: _handleTopContainerBookmarkChange,
-                        ),
+                              ),
+                              // Main poster image
+                              Positioned(
+                                left: width * 0.05,
+                                bottom: -height * 0.1, // وضع الصورة الصغيرة أسفل الصورة الكبيرة
+                                child: Container(
+                                  width: width * 0.32,
+                                  height: height * 0.225,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.lightGreyColor,
+                                    borderRadius: BorderRadius.circular(6),
+                                  ),
+                                  child: Stack(
+                                    children: [
+                                      Center(
+                                        child: InkWell(
+                                          onTap: () {
+                                            Navigator.pushNamed(context, MovieDetailsScreen.routeName);
+                                          },
+                                          child: Image.network(
+                                            imageUrl,
+                                            fit: BoxFit.fill,
+                                            width: double.infinity,
+                                            height: double.infinity,
+                                          ),
+                                        ),
+                                      ),
+                                      Align(
+                                        alignment: Alignment.topLeft,
+                                        child: IconButton(
+                                          icon: _isTopContainerBookmarked
+                                              ? const Icon(
+                                            Icons.bookmark_added,
+                                            color: AppColors.orangeColor,
+                                          )
+                                              : const Icon(
+                                            Icons.bookmark_add_outlined,
+                                            color: AppColors.whiteColor,
+                                          ),
+                                          onPressed: _handleTopContainerBookmarkChange,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              // Movie title and release date
+                              Positioned(
+                                left: width * 0.4,
+                                bottom: height * 0.05, // موقع اسم الفيلم وتاريخه أسفل الصورة الكبيرة
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: width * 0.02),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        movie.title ?? "Title not available",
+                                        style: Theme.of(context).textTheme.headlineLarge,
+                                      ),
+                                      SizedBox(height: height * 0.005),
+                                      Text(
+                                        movie.releaseDate ?? "Date not available",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .labelLarge!
+                                            .copyWith(
+                                          color: AppColors.moviesDetailsColor
+                                              .withOpacity(0.7),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                      options: CarouselOptions(
+                        height: height * 0.35, // Adjust the height as needed
+                        autoPlay: true,
+                        aspectRatio: 16 / 9,
+                        viewportFraction: 0.8,
                       ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-          // Container el text ( title w dexc)
-          Padding(
-            padding: EdgeInsets.only(
-              left: width * 0.4,
-              top: height * 0.045,
-            ), // Adjust padding to position correctly
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Title finally goes here",
-                  style: Theme.of(context).textTheme.headlineLarge,
-                ),
-                SizedBox(height: height * 0.005),
-                Text(
-                  "date w time b2a",
-                  style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                        color: AppColors.moviesDetailsColor.withOpacity(0.7),
-                      ),
-                ),
-              ],
-            ),
-          ),
-          // Spacer to separate the text from the rest of the content
-          SizedBox(height: height * 0.015),
-          // Content sections
-          Content(
-            title: releases,
-            itemCount: 5,
-            isScrollable: true,
-            initialBookmarks: _bookmarkedItems,
-            onBookmarkChanged: _handleContentBookmarkChange,
-          ),
-          Content(
-            title: recommended,
-            itemCount: 5,
-            isScrollable: true,
-            initialBookmarks: _bookmarkedItems,
-            onBookmarkChanged: _handleContentBookmarkChange,
+                    ),
+                    SizedBox(height: height * 0.015),
+                    Content(
+                      title: releases,
+                      itemCount: 5,
+                      isScrollable: true,
+                      initialBookmarks: _bookmarkedItems,
+                      onBookmarkChanged: _handleContentBookmarkChange,
+                    ),
+                    Content(
+                      title: recommended,
+                      itemCount: 5,
+                      isScrollable: true,
+                      initialBookmarks: _bookmarkedItems,
+                      onBookmarkChanged: _handleContentBookmarkChange,
+                    ),
+                  ],
+                );
+              } else {
+                return Column(
+                  children: [
+                    const Text('No data available'),
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {}); // Rebuild to retry fetching data
+                      },
+                      child: const Text('Try again'),
+                    ),
+                  ],
+                );
+              }
+            },
           ),
         ],
       ),
