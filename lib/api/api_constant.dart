@@ -10,6 +10,6 @@ class ApiConstant {
   static const String searchMoviepath = '/3/search/movie';
   static const String genreMoviepath = '/3/genre/movie/list';
   static const String discoverMoviepath = '/3/discover/movie';
-  static String detailsMovieApi(int movieId) => '/3/movie/$movieId';
-  static String similarMoviesApi(int movieId) => '/3/movie/$movieId/similar';
+  static String detailsMoviepath(int movieId) => '/3/movie/$movieId';
+  static String similarMoviespath(int movieId) => '/3/movie/$movieId/similar';
 }

@@ -6,6 +6,8 @@ import 'package:movies_application/model/NewReleaseResponse.dart';
 import 'package:movies_application/model/PopularResponse.dart';
 import 'package:movies_application/model/SearchResponse.dart';
 import 'package:movies_application/model/TopRatedResponse.dart';
+import 'package:movies_application/model/MoviesSimilarResponse.dart';
+import 'package:movies_application/model/MovieDetailsResponse.dart';
 import 'api_constant.dart';
 import 'dart:io';
 
@@ -18,7 +20,10 @@ class HttpResponse<T> {
 
 class ApiManager {
   static Future<HttpResponse<PopularResponse>> getPopularMovies() async {
-    Uri url = Uri.parse('https://api.themoviedb.org/3/movie/popular');
+    Uri url = Uri(
+        scheme: ApiConstant.scheme,
+        host: ApiConstant.host,
+        path: ApiConstant.popularMoviespath);
     var response = await http.get(url, headers: {
       "Authorization": 'Bearer ${ApiConstant.token}',
       "accept": 'application/json',
@@ -36,7 +41,10 @@ class ApiManager {
 
   static Future<HttpResponse<NewReleaseResponse>>
       getNewReleasesMoviesApi() async {
-    Uri url = Uri.parse('https://api.themoviedb.org/3/movie/new_releases');
+    Uri url = Uri(
+        scheme: ApiConstant.scheme,
+        host: ApiConstant.host,
+        path: ApiConstant.newReleasesMoviespath);
     var response = await http.get(url, headers: {
       "Authorization": 'Bearer ${ApiConstant.token}',
       "accept": 'application/json',
@@ -53,7 +61,10 @@ class ApiManager {
   }
 
   static Future<HttpResponse<TopRatedResponse>> getTopRatedMoviesApi() async {
-    Uri url = Uri.parse('https://api.themoviedb.org/3/movie/top_rated');
+    Uri url = Uri(
+        scheme: ApiConstant.scheme,
+        host: ApiConstant.host,
+        path: ApiConstant.topRatedMoviespath);
     var response = await http.get(url, headers: {
       "Authorization": 'Bearer ${ApiConstant.token}',
       "accept": 'application/json',
@@ -71,7 +82,10 @@ class ApiManager {
 
   static Future<HttpResponse<SearchResponse>> getSearchMovieApi(
       String searchId) async {
-    Uri url = Uri.parse('/3/search/movie');
+    Uri url = Uri(
+        scheme: ApiConstant.scheme,
+        host: ApiConstant.host,
+        path: ApiConstant.searchMoviepath);
     var response = await http.get(url, headers: {
       "Authorization": 'Bearer ${ApiConstant.token}',
       "accept": 'application/json',
@@ -92,6 +106,7 @@ class ApiManager {
         scheme: ApiConstant.scheme,
         host: ApiConstant.host,
         path: ApiConstant.genreMoviepath);
+    print(url);
     var response = await http.get(url, headers: {
       "Authorization": 'Bearer ${ApiConstant.token}',
       "accept": 'application/json',
@@ -109,7 +124,11 @@ class ApiManager {
   }
 
   static Future<HttpResponse<DiscoverResponse>> getDiscoverMovieApi() async {
-    Uri url = Uri.parse('/3/discover/movie');
+    Uri url = Uri(
+        scheme: ApiConstant.scheme,
+        host: ApiConstant.host,
+        path: ApiConstant.discoverMoviepath);
+    print(url);
     var response = await http.get(url, headers: {
       "Authorization": 'Bearer ${ApiConstant.token}',
       "accept": 'application/json',
@@ -125,41 +144,45 @@ class ApiManager {
     }
   }
 
-  // static Future<HttpResponse<DetailsMovieResponse>> getDetailsMovie(
-  //     int movieId) async {
-  //   Uri url = Uri.parse('/3/movie/$movieId');
+  static Future<HttpResponse<MovieDetailsResponse>> getDetailsMovieApi(
+      int movieId) async {
+    Uri url = Uri(
+        scheme: ApiConstant.scheme,
+        host: ApiConstant.host,
+        path: ApiConstant.detailsMoviepath(movieId));
+    var response = await http.get(url, headers: {
+      "Authorization": 'Bearer ${ApiConstant.token}',
+      "accept": 'application/json',
+    });
+    int status = response.statusCode;
+    try {
+      var responseBody = response.body;
+      var json = jsonDecode(responseBody);
+      var movieDetailsrResponse = MovieDetailsResponse.fromJson(json);
+      return HttpResponse(movieDetailsrResponse, status);
+    } catch (e) {
+      return HttpResponse(MovieDetailsResponse(), 500);
+    }
+  }
 
-  //   try {
-  //     var response = await http.get(url, headers: {
-  //       "Authorization":
-  //           'Bearer ${ApiConstant.token}', // Bearer token for authorization
-  //       "accept": 'application/json',
-  //     });
-
-  //     var responseBody = response.body;
-  //     var json = jsonDecode(responseBody);
-  //     return DetailsMovieResponse.fromJson(json);
-  //   } catch (e) {
-  //     throw e;
-  //   }
-  // }
-
-  // static Future<HttpResponse<SimilarMoviesResponse>> getSimilarMovies(
-  //     int movieId) async {
-  //   Uri url = Uri.parse('/3/movie/$movieId/similar');
-
-  //   try {
-  //     var response = await http.get(url, headers: {
-  //       "Authorization":
-  //           'Bearer ${ApiConstant.token}', // Bearer token for authorization
-  //       "accept": 'application/json',
-  //     });
-
-  //     var responseBody = response.body;
-  //     var json = jsonDecode(responseBody);
-  //     return SimilarMoviesResponse.fromJson(json);
-  //   } catch (e) {
-  //     throw e;
-  //   }
-  // }
+  static Future<HttpResponse<MoviesSimilarResponse>> getSimilarMoviesApi(
+      int movieId) async {
+    Uri url = Uri(
+        scheme: ApiConstant.scheme,
+        host: ApiConstant.host,
+        path: ApiConstant.similarMoviespath(movieId));
+    var response = await http.get(url, headers: {
+      "Authorization": 'Bearer ${ApiConstant.token}',
+      "accept": 'application/json',
+    });
+    int status = response.statusCode;
+    try {
+      var responseBody = response.body;
+      var json = jsonDecode(responseBody);
+      var moviesSimilarResponse = MoviesSimilarResponse.fromJson(json);
+      return HttpResponse(moviesSimilarResponse, status);
+    } catch (e) {
+      return HttpResponse(MoviesSimilarResponse(), 500);
+    }
+  }
 }
