@@ -9,7 +9,6 @@ import 'package:movies_application/model/TopRatedResponse.dart';
 import 'package:movies_application/model/MoviesSimilarResponse.dart';
 import 'package:movies_application/model/MovieDetailsResponse.dart';
 import 'api_constant.dart';
-import 'dart:io';
 
 ///https://api.themoviedb.org/3/movie/popular?api_key=28499bb843e6223bb89df9a57661cd222c
 class HttpResponse<T> {
@@ -106,7 +105,6 @@ class ApiManager {
         scheme: ApiConstant.scheme,
         host: ApiConstant.host,
         path: ApiConstant.genreMoviepath);
-    print(url);
     var response = await http.get(url, headers: {
       "Authorization": 'Bearer ${ApiConstant.token}',
       "accept": 'application/json',
@@ -123,12 +121,20 @@ class ApiManager {
     }
   }
 
-  static Future<HttpResponse<DiscoverResponse>> getDiscoverMovieApi() async {
+  static Future<HttpResponse<DiscoverResponse>> getDiscoverMovieApi(
+      Object genreid, Object page) async {
     Uri url = Uri(
         scheme: ApiConstant.scheme,
         host: ApiConstant.host,
-        path: ApiConstant.discoverMoviepath);
-    print(url);
+        path: ApiConstant.discoverMoviepath,
+        queryParameters: {
+          'include_adult': 'true',
+          'include_video': 'true',
+          'language': 'en-US',
+          'page': page.toString(),
+          'sort_by': 'popularity.desc',
+          'with_genres': genreid.toString()
+        });
     var response = await http.get(url, headers: {
       "Authorization": 'Bearer ${ApiConstant.token}',
       "accept": 'application/json',
