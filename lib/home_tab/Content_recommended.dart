@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import '../ui/app_colors.dart';
 import 'movie_details/screen/movie_details_screen.dart';
 
-class Content extends StatefulWidget {
+class ContentRecommended extends StatefulWidget {
   final String title;
   final int itemCount;
   final bool isScrollable;
   final Map<int, bool> initialBookmarks;
   final void Function(int) onBookmarkChanged;
 
-  const Content({
+  const ContentRecommended({
     super.key,
     required this.title,
     required this.itemCount,
@@ -22,7 +22,7 @@ class Content extends StatefulWidget {
   ContentState createState() => ContentState();
 }
 
-class ContentState extends State<Content> {
+class ContentState extends State<ContentRecommended> {
   late Map<int, bool> _isBookmarked;
 
   @override
@@ -90,13 +90,13 @@ class ContentState extends State<Content> {
                           },
                           child: isBookmarked
                               ? const Icon(
-                                  Icons.bookmark_added,
-                                  color: AppColors.orangeColor,
-                                )
+                            Icons.bookmark_added,
+                            color: AppColors.orangeColor,
+                          )
                               : const Icon(
-                                  Icons.bookmark_add_outlined,
-                                  color: AppColors.whiteColor,
-                                ),
+                            Icons.bookmark_add_outlined,
+                            color: AppColors.whiteColor,
+                          ),
                         ),
                       ),
                       Positioned(
@@ -118,7 +118,7 @@ class ContentState extends State<Content> {
                                   Text(
                                     "10",
                                     style:
-                                        Theme.of(context).textTheme.labelLarge,
+                                    Theme.of(context).textTheme.labelLarge,
                                   ),
                                 ],
                               ),
