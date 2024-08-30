@@ -80,11 +80,12 @@ class ApiManager {
   }
 
   static Future<HttpResponse<SearchResponse>> getSearchMovieApi(
-      String searchId) async {
+      String query) async {
     Uri url = Uri(
         scheme: ApiConstant.scheme,
         host: ApiConstant.host,
-        path: ApiConstant.searchMoviepath);
+        path: ApiConstant.searchMoviepath,
+        queryParameters: {'query': query});
     var response = await http.get(url, headers: {
       "Authorization": 'Bearer ${ApiConstant.token}',
       "accept": 'application/json',
