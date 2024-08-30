@@ -1,173 +1,56 @@
-import 'dart:io';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:movies_application/model/Movie.dart';
+import 'package:movies_application/provider/bookmark_provider.dart';
+import 'package:movies_application/search_tab/movie_list.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:movies_application/ui/app_colors.dart';
+import 'package:provider/provider.dart';
 
-class WatchListTab extends StatefulWidget {
+class WatchListTab extends StatelessWidget {
   const WatchListTab({super.key});
 
   @override
-  WatchListTabState createState() => WatchListTabState();
-}
-
-class WatchListTabState extends State<WatchListTab> {
-  late Future<List<Map<String, dynamic>>> itemsFuture;
-
-  @override
-  void initState() {
-    super.initState();
-    itemsFuture = Future.value(mockItems());
-  }
-
-  List<Map<String, dynamic>> mockItems() {
-    return [
-      {
-        'imageUrl': 'https://via.placeholder.com/600',
-        'title': 'Title',
-        'description': 'The description for movie here.',
-      },
-      {
-        'imageUrl': 'https://via.placeholder.com/600',
-        'title': 'Title',
-        'description': 'The description for movie here.',
-      },
-      {
-        'imageUrl': 'https://via.placeholder.com/600',
-        'title': 'Title',
-        'description': 'The description for movie here.',
-      },
-      {
-        'imageUrl': 'https://via.placeholder.com/600',
-        'title': 'Title',
-        'description': 'The description for movie here.',
-      },
-      {
-        'imageUrl': 'https://via.placeholder.com/600',
-        'title': 'Title',
-        'description': 'The description for movie here.',
-      },
-      {
-        'imageUrl': 'https://via.placeholder.com/600',
-        'title': 'Title',
-        'description': 'The description for movie here.',
-      },
-      {
-        'imageUrl': 'https://via.placeholder.com/600',
-        'title': 'Title',
-        'description': 'The description for movie here.',
-      },
-    ];
-  }
-
-  @override
   Widget build(BuildContext context) {
-    var watchList = AppLocalizations.of(context)!.watchlist;
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: false,
-        title: Text(
-          watchList,
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
-        elevation: 0,
-        backgroundColor: AppColors.blackColor.withOpacity(0.5),
-        surfaceTintColor: Colors.transparent,
-      ),
-      extendBodyBehindAppBar: true,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(
-            child: FutureBuilder<List<Map<String, dynamic>>>(
-              future: itemsFuture,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(
-                    child: Platform.isIOS
-                        ? const CupertinoActivityIndicator()
-                        : const CircularProgressIndicator(),
-                  );
-                } else if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
-                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return const Center(child: Text('No data found'));
-                } else {
-                  return ListView.builder(
-                    itemCount: snapshot.data!.length,
-                    itemBuilder: (context, index) {
-                      final item = snapshot.data![index];
-                      return buildListItem(
-                        imageUrl: item['imageUrl'] as String,
-                        title: item['title'] as String,
-                        description: item['description'] as String,
-                      );
-                    },
-                  );
-                }
-              },
+    return Consumer<BookmarkProvider>(
+      builder: (context, bookmarkProvider, child) {
+        double height = MediaQuery.of(context).size.height;
+        double width = MediaQuery.of(context).size.width;
+        var watchList = AppLocalizations.of(context)!.watchlist;
+        List<Movie> bookmarkedMovies = bookmarkProvider.bookmarkedMovies;
+
+        return Scaffold(
+          appBar: AppBar(
+            centerTitle: false,
+            backgroundColor: AppColors.blackColor.withOpacity(0.5),
+            surfaceTintColor: Colors.transparent,
+            title: Text(
+              watchList,
+              style: Theme.of(context).textTheme.titleLarge,
+              textAlign: TextAlign.left,
             ),
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget buildListItem({
-    required String imageUrl,
-    required String title,
-    required String description,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Row(
-            children: [
-              Image.network(
-                imageUrl,
-                width: 130,
-                height: 100,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    color: Colors.grey,
-                    child: const Center(child: Text('Image failed to load')),
-                  );
-                },
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      description,
-                      style: Theme.of(context)
-                          .textTheme
-                          .labelMedium!
-                          .copyWith(color: AppColors.lightGreyColor),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.0),
-          child: Divider(
-            height: 20,
-            thickness: 1,
-          ),
-        ),
-      ],
+          extendBodyBehindAppBar: true,
+          body: bookmarkedMovies.isEmpty
+              ? Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Image.asset(
+                        'assets/images/no-movies.png',
+                        height: height * 0.12,
+                        width: width * 0.2,
+                      ),
+                      Text(
+                        'No Movies Added to watch list',
+                        style: Theme.of(context).textTheme.labelMedium,
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                )
+              : MovieList(searchResults: bookmarkedMovies),
+        );
+      },
     );
   }
 }

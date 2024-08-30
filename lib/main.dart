@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movies_application/provider/bookmark_provider.dart';
 import 'package:provider/provider.dart'; // Import the provider package
 import 'package:movies_application/provider/app_locale_provider.dart';
 import 'package:movies_application/ui/app_theme_data.dart';
@@ -8,8 +9,15 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() {
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => AppLocaleProvider(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => BookmarkProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => AppLocaleProvider(),
+        ),
+      ],
       child: const MyApp(),
     ),
   );
