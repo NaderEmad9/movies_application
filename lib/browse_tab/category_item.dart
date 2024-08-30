@@ -1,23 +1,49 @@
 import 'package:flutter/material.dart';
+import 'package:movies_application/browse_tab/moviesbygenre_tab.dart';
 import 'package:movies_application/model/GenresResponse.dart';
+import 'package:movies_application/browse_tab/poster_map.dart';
 
-// ignore: must_be_immutable
+class GenreArguments {
+  final String genre;
+  final Object genreid;
+
+  GenreArguments({required this.genre, required this.genreid});
+}
+
 class CategoryItem extends StatelessWidget {
-  Genres genres;
-  CategoryItem({super.key, required this.genres});
+  final Genres genres;
+  const CategoryItem({super.key, required this.genres});
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Center(
-          child: Image.asset('assets/images/3.0x/default@3x.png'),
-        ),
-        Center(
+    final posterpath =
+        genreAssetsMap[genres.name] ?? 'assets/images/browseicon.png';
+    String genre = genres.name ?? '';
+    Object genreid = genres.id ?? '';
+
+    return InkWell(
+      onTap: () {
+        Navigator.pushNamed(
+          context,
+          MoviesbygenreTab.routeName,
+          arguments: GenreArguments(genre: genre, genreid: genreid),
+        );
+      },
+      child: Stack(
+        children: [
+          Center(
+            child: Image.network(
+              posterpath,
+              fit: BoxFit.fill,
+            ),
+          ),
+          Center(
             child: Text(
-          genres.name ?? '',
-          style: Theme.of(context).textTheme.titleSmall,
-        )),
-      ],
+              genre,
+              style: Theme.of(context).textTheme.titleSmall,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
