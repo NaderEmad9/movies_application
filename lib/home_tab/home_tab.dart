@@ -1,9 +1,10 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart'; // استيراد الحزمة
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:movies_application/api/api_manager.dart';
 import 'package:movies_application/home_tab/content.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:movies_application/home_tab/movie_details/screen/movie_details_screen.dart';
+
 import '../model/PopularResponse.dart';
 import '../ui/app_colors.dart';
 
@@ -47,10 +48,11 @@ class HomeTabState extends State<HomeTab> {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(
                   child: CircularProgressIndicator(
-                    color: AppColors.whiteColor,
+                    color: AppColors.orangeColor,
                   ),
                 );
-              } else if (snapshot.hasError || snapshot.data?.statusCode != 200) {
+              } else if (snapshot.hasError ||
+                  snapshot.data?.statusCode != 200) {
                 return Column(
                   children: [
                     const Text('Something went wrong'),
@@ -74,11 +76,19 @@ class HomeTabState extends State<HomeTab> {
                       itemCount: movies.length,
                       itemBuilder: (context, index, realIndex) {
                         var movie = movies[index];
-                        var imageUrl = 'https://image.tmdb.org/t/p/w500${movie.posterPath}';
+                        var imageUrl =
+                            'https://image.tmdb.org/t/p/w500${movie.posterPath}';
 
                         return InkWell(
                           onTap: () {
-                            Navigator.pushNamed(context, MovieDetailsScreen.routeName);
+                            Navigator.pushNamed(
+                              context,
+                              MovieDetailsScreen.routeName,
+                              arguments: {
+                                'id': movie.id,
+                                'genreIds': movie.genreIds,
+                              },
+                            );
                           },
                           child: Stack(
                             clipBehavior: Clip.none,
@@ -87,7 +97,7 @@ class HomeTabState extends State<HomeTab> {
                               Positioned.fill(
                                 child: Image.network(
                                   imageUrl,
-                                  fit: BoxFit.cover,
+                                  fit: BoxFit.fill,
                                 ),
                               ),
                               // Play icon centered
@@ -101,7 +111,8 @@ class HomeTabState extends State<HomeTab> {
                               // Main poster image
                               Positioned(
                                 left: width * 0.05,
-                                bottom: -height * 0.1, // وضع الصورة الصغيرة أسفل الصورة الكبيرة
+                                bottom: -height * 0.1,
+                                // وضع الصورة الصغيرة أسفل الصورة الكبيرة
                                 child: Container(
                                   width: width * 0.32,
                                   height: height * 0.225,
@@ -114,7 +125,14 @@ class HomeTabState extends State<HomeTab> {
                                       Center(
                                         child: InkWell(
                                           onTap: () {
-                                            Navigator.pushNamed(context, MovieDetailsScreen.routeName);
+                                            Navigator.pushNamed(
+                                              context,
+                                              MovieDetailsScreen.routeName,
+                                              arguments: {
+                                                'id': movie.id,
+                                                'genreIds': movie.genreIds,
+                                              },
+                                            );
                                           },
                                           child: Image.network(
                                             imageUrl,
@@ -129,14 +147,15 @@ class HomeTabState extends State<HomeTab> {
                                         child: IconButton(
                                           icon: _isTopContainerBookmarked
                                               ? const Icon(
-                                            Icons.bookmark_added,
-                                            color: AppColors.orangeColor,
-                                          )
+                                                  Icons.bookmark_added,
+                                                  color: AppColors.orangeColor,
+                                                )
                                               : const Icon(
-                                            Icons.bookmark_add_outlined,
-                                            color: AppColors.whiteColor,
-                                          ),
-                                          onPressed: _handleTopContainerBookmarkChange,
+                                                  Icons.bookmark_add_outlined,
+                                                  color: AppColors.whiteColor,
+                                                ),
+                                          onPressed:
+                                              _handleTopContainerBookmarkChange,
                                         ),
                                       ),
                                     ],
@@ -146,26 +165,33 @@ class HomeTabState extends State<HomeTab> {
                               // Movie title and release date
                               Positioned(
                                 left: width * 0.4,
-                                bottom: height * 0.05, // موقع اسم الفيلم وتاريخه أسفل الصورة الكبيرة
+                                bottom: height * 0.05,
+                                // موقع اسم الفيلم وتاريخه أسفل الصورة الكبيرة
                                 child: Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: width * 0.02),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: width * 0.02),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         movie.title ?? "Title not available",
-                                        style: Theme.of(context).textTheme.headlineLarge,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headlineLarge,
                                       ),
                                       SizedBox(height: height * 0.005),
                                       Text(
-                                        movie.releaseDate ?? "Date not available",
+                                        movie.releaseDate ??
+                                            "Date not available",
                                         style: Theme.of(context)
                                             .textTheme
                                             .labelLarge!
                                             .copyWith(
-                                          color: AppColors.moviesDetailsColor
-                                              .withOpacity(0.7),
-                                        ),
+                                              color: AppColors
+                                                  .moviesDetailsColor
+                                                  .withOpacity(0.7),
+                                            ),
                                       ),
                                     ],
                                   ),
@@ -178,8 +204,7 @@ class HomeTabState extends State<HomeTab> {
                       options: CarouselOptions(
                         height: height * 0.35, // Adjust the height as needed
                         autoPlay: true,
-                        aspectRatio: 16 / 9,
-                        viewportFraction: 0.8,
+                        viewportFraction: 1,
                       ),
                     ),
                     SizedBox(height: height * 0.015),
