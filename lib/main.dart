@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
       locale: Locale(localeProvider.languageCode),
       routes: {
         AppScreen.routeName: (context) => const AppScreen(),
-        MovieDetailsScreen.routeName: (context) => const MovieDetailsScreen(),
+        MovieDetailsScreen.routeName: (context) => MovieDetailsScreen(),
       },
     );
   }

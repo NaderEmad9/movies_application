@@ -38,7 +38,9 @@ class MovieList extends StatelessWidget {
                     Navigator.pushNamed(
                       context,
                       MovieDetailsScreen.routeName,
-                      // arguments: {'id': movie.id},
+                      arguments: {
+                        'id': movie.id,
+                      },
                     );
                   },
                   isBookmarked: isBookmarked,
