@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:movies_application/model/NewReleaseResponse.dart';
 import '../ui/app_colors.dart';
 import 'movie_details/screen/movie_details_screen.dart';
-import '../model/Movie.dart'; // تأكد من استيراد موديل الفيلم
+import '../model/Movie.dart';
 
 class ContentForNewRelease extends StatefulWidget {
   final String title;
-  final List<NewRelease> movies; // تغيير من Movie إلى NewRelease
+  final List<NewRelease> movies;
   final bool isScrollable;
   final Map<int, bool> initialBookmarks;
   final void Function(int) onBookmarkChanged;
