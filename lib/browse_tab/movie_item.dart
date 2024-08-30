@@ -1,16 +1,62 @@
+// lib/home_tab/movie_item.dart
 import 'package:flutter/material.dart';
+import 'package:movies_application/browse_tab/category_item.dart';
+import 'package:movies_application/browse_tab/genre_tags.dart';
+import 'package:movies_application/browse_tab/moviesbygenre_tab.dart';
+import 'package:provider/provider.dart';
+import 'package:movies_application/model/Movie.dart';
+import 'package:movies_application/provider/bookmark_provider.dart';
+import 'package:movies_application/home_tab/movie_details/screen/movie_details_screen.dart';
 import 'package:movies_application/model/DiscoverResponse.dart';
 import 'package:movies_application/provider/genre_provider.dart';
 import 'package:movies_application/ui/app_colors.dart';
 
-class MovieItem extends StatelessWidget {
+class MovieItem extends StatefulWidget {
   final Discover movies;
   const MovieItem({super.key, required this.movies});
 
   @override
+  State<MovieItem> createState() => _MovieItemState();
+}
+
+class _MovieItemState extends State<MovieItem> {
+  late bool isBookmarked = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkIfBookmarked();
+  }
+
+  Future<void> _checkIfBookmarked() async {
+    final bookmarkProvider =
+        Provider.of<BookmarkProvider>(context, listen: false);
+    final movie = Movie.fromDiscover(widget.movies);
+    final bookmarked = await bookmarkProvider.isBookmarked(movie);
+    setState(() {
+      isBookmarked = bookmarked;
+    });
+  }
+
+  void onBookmark() async {
+    final bookmarkProvider =
+        Provider.of<BookmarkProvider>(context, listen: false);
+    final movie = Movie.fromDiscover(widget.movies);
+
+    setState(() {
+      isBookmarked = !isBookmarked;
+    });
+
+    if (isBookmarked) {
+      await bookmarkProvider.addBookmark(movie);
+    } else {
+      await bookmarkProvider.removeBookmark(movie);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
 
     return Column(children: [
       Container(
@@ -21,34 +67,60 @@ class MovieItem extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
+                SizedBox(
                   height: height * 0.19,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(12),
-                    child: Image.network(
-                      'https://image.tmdb.org/t/p/w500${movies.posterPath}',
-                      fit: BoxFit.cover,
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.pushNamed(
+                            context, MovieDetailsScreen.routeName,
+                            arguments: widget.movies.id);
+                      },
+                      child: Image.network(
+                        'https://image.tmdb.org/t/p/w500${widget.movies.posterPath}',
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),
-                SizedBox(width: 10), // Space between image and text
+                const SizedBox(width: 10),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        movies.title ?? '',
-                        style: Theme.of(context).textTheme.titleSmall,
+                      InkWell(
+                        onTap: () {
+                          Navigator.pushNamed(
+                              context, MovieDetailsScreen.routeName,
+                              arguments: widget.movies.id);
+                        },
+                        child: Text(
+                          widget.movies.title ?? '',
+                          style: Theme.of(context).textTheme.titleSmall,
+                        ),
                       ),
-                      SizedBox(
-                          height: height *
-                              0.01), // Space between title and release date
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: IconButton(
+                          icon: Icon(
+                            isBookmarked
+                                ? Icons.bookmark
+                                : Icons.bookmark_border,
+                            color: isBookmarked
+                                ? AppColors.orangeColor
+                                : AppColors.lightGreyColor,
+                          ),
+                          onPressed: onBookmark,
+                        ),
+                      ),
+                      SizedBox(height: height * 0.01),
                       Row(
                         children: [
-                          Icon(Icons.star, color: Colors.amber, size: 16),
-                          SizedBox(width: 5),
+                          const Icon(Icons.star, color: Colors.amber, size: 16),
+                          const SizedBox(width: 5),
                           Text(
-                            '${movies.voteAverage ?? 0.0}', // Display the rating
+                            '${widget.movies.voteAverage ?? 0.0}',
                             style: Theme.of(context)
                                 .textTheme
                                 .bodySmall
@@ -56,24 +128,32 @@ class MovieItem extends StatelessWidget {
                           ),
                         ],
                       ),
-                      SizedBox(
-                          height: height * 0.01), // Space before release date
+                      SizedBox(height: height * 0.01),
                       Text(
-                        movies.releaseDate ?? '',
+                        widget.movies.releaseDate ?? '',
                         style: Theme.of(context)
                             .textTheme
                             .bodySmall
                             ?.copyWith(color: AppColors.lightGreyColor),
                       ),
-                      SizedBox(
-                          height: height * 0.01), // Space before genre tags
+                      SizedBox(height: height * 0.01),
                       Wrap(
                         spacing: 5.0,
                         runSpacing: 5.0,
-                        children: movies.genreIds
-                                ?.map((id) => GenreTag(
-                                    id: id)) // Assuming you have a GenreTag widget or a way to map IDs to genre names
-                                .toList() ??
+                        children: widget.movies.genreIds?.map((id) {
+                              final genreName =
+                                  GenreProvider.getGenreNameById(id);
+                              return GenreTag(
+                                id: id,
+                                name: genreName,
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                      context, MoviesbygenreTab.routeName,
+                                      arguments: GenreArguments(
+                                          genre: genreName, genreid: id));
+                                },
+                              );
+                            }).toList() ??
                             [],
                       ),
                     ],
@@ -85,35 +165,9 @@ class MovieItem extends StatelessWidget {
         ),
       ),
       const Divider(
-        thickness: 0.5, // Ensure the thickness is reasonable
+        thickness: 0.5,
         color: AppColors.lightGreyColor,
       ),
     ]);
-  }
-}
-
-class GenreTag extends StatelessWidget {
-  final int id;
-  const GenreTag({super.key, required this.id});
-
-  @override
-  Widget build(BuildContext context) {
-    String genreName = GenreProvider.getGenreNameById(id);
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        border: Border.all(color: AppColors.lightGreyColor),
-        color: AppColors.blackColor.withOpacity(0.2),
-        borderRadius: BorderRadius.circular(5),
-      ),
-      child: Text(
-        genreName,
-        style: Theme.of(context)
-            .textTheme
-            .bodySmall
-            ?.copyWith(color: AppColors.lightGreyColor),
-      ),
-    );
   }
 }

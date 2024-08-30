@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:movies_application/api/api_manager.dart';
 import 'package:movies_application/browse_tab/category_item.dart';
+import 'package:provider/provider.dart';
+import 'package:movies_application/api/api_manager.dart';
 import 'package:movies_application/model/DiscoverResponse.dart';
-import 'movie_item.dart';
+import 'package:movies_application/provider/bookmark_provider.dart';
 import 'package:movies_application/ui/app_colors.dart';
+import 'movie_item.dart';
 
 class MoviesbygenreTab extends StatefulWidget {
   static const String routeName = "movies_by_genre";
@@ -50,30 +52,33 @@ class _MoviesbygenreTabState extends State<MoviesbygenreTab> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          args.genre,
-          style: Theme.of(context).textTheme.titleLarge,
+    return ChangeNotifierProvider(
+      create: (_) => BookmarkProvider(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            args.genre,
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+          elevation: 0,
+          backgroundColor: AppColors.blackColor.withOpacity(0.5),
+          surfaceTintColor: Colors.transparent,
         ),
-        elevation: 0,
-        backgroundColor: AppColors.blackColor.withOpacity(0.5),
-        surfaceTintColor: Colors.transparent,
-      ),
-      extendBodyBehindAppBar: true,
-      body: ListView.builder(
-        controller: controller,
-        padding: EdgeInsets.symmetric(
-          vertical: MediaQuery.of(context).size.height * 0.12,
-          horizontal: MediaQuery.of(context).size.width * 0.06,
+        extendBodyBehindAppBar: true,
+        body: ListView.builder(
+          controller: controller,
+          padding: EdgeInsets.symmetric(
+            vertical: MediaQuery.of(context).size.height * 0.12,
+            horizontal: MediaQuery.of(context).size.width * 0.06,
+          ),
+          itemCount: moviesList.length + (isLoadingMore ? 1 : 0),
+          itemBuilder: (context, index) {
+            if (index == moviesList.length) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            return MovieItem(movies: moviesList[index]);
+          },
         ),
-        itemCount: moviesList.length + (isLoadingMore ? 1 : 0),
-        itemBuilder: (context, index) {
-          if (index == moviesList.length) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          return MovieItem(movies: moviesList[index]);
-        },
       ),
     );
   }

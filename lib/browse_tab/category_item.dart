@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movies_application/browse_tab/moviesbygenre_tab.dart';
 import 'package:movies_application/model/GenresResponse.dart';
+import 'package:movies_application/browse_tab/poster_map.dart';
 
 class GenreArguments {
   final String genre;
@@ -10,12 +11,12 @@ class GenreArguments {
 }
 
 class CategoryItem extends StatelessWidget {
-  // Changed to StatelessWidget
-  final Genres genres; // Made it final
+  final Genres genres;
   const CategoryItem({super.key, required this.genres});
-
   @override
   Widget build(BuildContext context) {
+    final posterpath =
+        genreAssetsMap[genres.name] ?? 'assets/images/browseicon.png';
     String genre = genres.name ?? '';
     Object genreid = genres.id ?? '';
 
@@ -30,7 +31,10 @@ class CategoryItem extends StatelessWidget {
       child: Stack(
         children: [
           Center(
-            child: Image.asset('assets/images/3.0x/default@3x.png'),
+            child: Image.network(
+              posterpath,
+              fit: BoxFit.fill,
+            ),
           ),
           Center(
             child: Text(

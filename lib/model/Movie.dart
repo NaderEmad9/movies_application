@@ -1,3 +1,5 @@
+import 'DiscoverResponse.dart';
+
 class Movie {
   final String? id;
   final String? title;
@@ -30,4 +32,12 @@ class Movie {
   }
 
   get voteAverage => null;
+  factory Movie.fromDiscover(Discover discover) {
+    return Movie(
+      id: discover.id.toString(),
+      title: discover.title,
+      posterPath: discover.posterPath,
+      releaseDate: discover.releaseDate,
+    );
+  }
 }
