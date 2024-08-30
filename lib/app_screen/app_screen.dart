@@ -64,7 +64,7 @@ class _AppScreenState extends State<AppScreen> {
 
   List<Widget> tabs = [
     const HomeTab(),
-    const SearchTab(),
+    SearchTab(),
     BrowseTab(),
     const WatchListTab()
   ];
