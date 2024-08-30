@@ -6,8 +6,11 @@ import 'package:movies_application/home_tab/movie_details/widgets/show_movies.da
 import 'package:movies_application/home_tab/movie_details/widgets/similar_movies.dart';
 import 'package:movies_application/model/MovieDetailsResponse.dart';
 import 'package:movies_application/model/genre_map.dart';
-
+import 'package:provider/provider.dart';
+import 'package:movies_application/provider/bookmark_provider.dart';
 import '../../../ui/app_colors.dart';
+import 'package:movies_application/browse_tab/movie_item.dart';
+import 'package:movies_application/model/Movie.dart';
 
 class MovieDetailsScreen extends StatelessWidget {
   static const String routeName = "movie_details_screen";
@@ -19,11 +22,12 @@ class MovieDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
-    Map<String, dynamic> args =
-        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
 
-    int movieId = args['id'] ?? 501;
-    List<int> movieGenreIds = List<int>.from(args['genreIds'] ?? []);
+    // Use the MovieArguments to retrieve data passed to the screen
+    final args = ModalRoute.of(context)!.settings.arguments as MovieArguments;
+
+    int movieId = args.id;
+    List<int> movieGenreIds = args.genreids;
     List<String> genreNames =
         movieGenreIds.map((id) => GenreMap.genreMap[id] ?? 'Unknown').toList();
 
@@ -36,24 +40,7 @@ class MovieDetailsScreen extends StatelessWidget {
               color: AppColors.orangeColor,
             ),
           );
-        } else if (snapshot.hasError) {
-          // print("Error: ${snapshot.error}");
-          return Column(
-            children: [
-              const Text("Something went wrong"),
-              ElevatedButton(
-                onPressed: () {
-                  ApiManager.getDetailsMovieApi(movieId);
-                },
-                child: const Text("Try Again"),
-              ),
-            ],
-          );
-        }
-        //server => error ,success
-        if (snapshot.data!.statusCode != 200) {
-          // print("status_code: ${snapshot.data!.statusCode}");
-
+        } else if (snapshot.hasError || snapshot.data?.statusCode != 200) {
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -75,7 +62,6 @@ class MovieDetailsScreen extends StatelessWidget {
           String imageUrl = movieDetailsList?.backdropPath != null
               ? "$imageUrlConstant${movieDetailsList?.backdropPath}"
               : "https://wallpapers.com/images/high/error-placeholder-image-ozordu8s6n3xhi9h-2.png";
-          // print('$imageUrlConstant${movieDetailsList?.backdropPath}');
 
           return Scaffold(
             appBar: AppBar(
@@ -85,6 +71,10 @@ class MovieDetailsScreen extends StatelessWidget {
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               centerTitle: true,
+              actions: [
+                // Bookmark Button
+                BookmarkButton(movieDetailsList: movieDetailsList),
+              ],
             ),
             body: SingleChildScrollView(
               child: Column(
@@ -131,6 +121,72 @@ class MovieDetailsScreen extends StatelessWidget {
           );
         }
       },
+    );
+  }
+}
+
+// Bookmark button implementation
+class BookmarkButton extends StatefulWidget {
+  final MovieDetailsResponse? movieDetailsList;
+
+  const BookmarkButton({Key? key, required this.movieDetailsList})
+      : super(key: key);
+
+  @override
+  _BookmarkButtonState createState() => _BookmarkButtonState();
+}
+
+class _BookmarkButtonState extends State<BookmarkButton> {
+  late bool isBookmarked = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkIfBookmarked();
+  }
+
+  Future<void> _checkIfBookmarked() async {
+    final bookmarkProvider =
+        Provider.of<BookmarkProvider>(context, listen: false);
+    final movie = Movie(
+      id: widget.movieDetailsList?.id.toString() ?? '',
+      title: widget.movieDetailsList?.title ?? '',
+      // Add other necessary fields for Movie
+    );
+    final bookmarked = await bookmarkProvider.isBookmarked(movie);
+    setState(() {
+      isBookmarked = bookmarked;
+    });
+  }
+
+  void onBookmark() async {
+    final bookmarkProvider =
+        Provider.of<BookmarkProvider>(context, listen: false);
+    final movie = Movie(
+      id: widget.movieDetailsList?.id.toString() ?? '',
+      title: widget.movieDetailsList?.title ?? '',
+      // Add other necessary fields for Movie
+    );
+
+    setState(() {
+      isBookmarked = !isBookmarked;
+    });
+
+    if (isBookmarked) {
+      await bookmarkProvider.addBookmark(movie);
+    } else {
+      await bookmarkProvider.removeBookmark(movie);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: Icon(
+        isBookmarked ? Icons.bookmark : Icons.bookmark_border,
+        color: isBookmarked ? AppColors.orangeColor : AppColors.lightGreyColor,
+      ),
+      onPressed: onBookmark,
     );
   }
 }

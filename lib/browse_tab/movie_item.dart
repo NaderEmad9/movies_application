@@ -11,6 +11,15 @@ import 'package:movies_application/model/DiscoverResponse.dart';
 import 'package:movies_application/provider/genre_provider.dart';
 import 'package:movies_application/ui/app_colors.dart';
 
+class MovieArguments {
+  final String title;
+  final int id;
+  final List<int> genreids;
+
+  MovieArguments(
+      {required this.title, required this.id, required this.genreids});
+}
+
 class MovieItem extends StatefulWidget {
   final Discover movies;
   const MovieItem({super.key, required this.movies});
@@ -56,6 +65,9 @@ class _MovieItemState extends State<MovieItem> {
 
   @override
   Widget build(BuildContext context) {
+    String title = widget.movies.title ?? '';
+    int id = widget.movies.id ?? 0;
+    List<int>? genreids = widget.movies.genreIds ?? [];
     double height = MediaQuery.of(context).size.height;
 
     return Column(children: [
@@ -75,7 +87,8 @@ class _MovieItemState extends State<MovieItem> {
                       onTap: () {
                         Navigator.pushNamed(
                             context, MovieDetailsScreen.routeName,
-                            arguments: widget.movies.id);
+                            arguments: MovieArguments(
+                                title: title, id: id, genreids: genreids));
                       },
                       child: Image.network(
                         'https://image.tmdb.org/t/p/w500${widget.movies.posterPath}',

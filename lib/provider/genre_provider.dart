@@ -17,7 +17,6 @@ class GenreProvider {
 
     if (response.statusCode == 200) {
       List<dynamic> genres = jsonDecode(response.body)['genres'];
-      print(genres);
       for (var genre in genres) {
         _genreMap[genre['id']] = genre['name'];
       }
