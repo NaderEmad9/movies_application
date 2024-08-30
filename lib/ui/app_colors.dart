@@ -17,6 +17,8 @@ class AppColors {
       0xff121312); // this color is the main application color (ex. App background)
   static const Color moviesDetailsColor = Color(
       0xffB5B4B4); // this color is used only for movies details , for example(2019  PG-13  2h 7m) under the movie title
+  static const Color redColor =
+      Color(0xffd21515); // cachedImageErrorWidgetColor
 }
 
 class MyOwnColors {

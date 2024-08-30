@@ -66,7 +66,10 @@ class ContentState extends State<ContentForNewRelease> {
                           Navigator.pushNamed(
                             context,
                             MovieDetailsScreen.routeName,
-                            arguments: movie,
+                            arguments: {
+                              'id': movie.id,
+                              'genreIds': movie.genreIds,
+                            },
                           );
                         },
                         child: Container(
@@ -97,13 +100,13 @@ class ContentState extends State<ContentForNewRelease> {
                           },
                           child: isBookmarked
                               ? const Icon(
-                            Icons.bookmark_added,
-                            color: AppColors.orangeColor,
-                          )
+                                  Icons.bookmark_added,
+                                  color: AppColors.orangeColor,
+                                )
                               : const Icon(
-                            Icons.bookmark_add_outlined,
-                            color: AppColors.whiteColor,
-                          ),
+                                  Icons.bookmark_add_outlined,
+                                  color: AppColors.whiteColor,
+                                ),
                         ),
                       ),
                       Positioned(
@@ -124,7 +127,8 @@ class ContentState extends State<ContentForNewRelease> {
                                   const SizedBox(width: 3),
                                   Text(
                                     movie.voteAverage.toString(),
-                                    style: Theme.of(context).textTheme.labelLarge,
+                                    style:
+                                        Theme.of(context).textTheme.labelLarge,
                                   ),
                                 ],
                               ),
