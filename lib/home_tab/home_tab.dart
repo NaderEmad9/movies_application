@@ -59,23 +59,7 @@ class HomeTabState extends State<HomeTab> {
 
   List<Movie> convertToMovies(List<dynamic> items) {
     return items.map((item) {
-      if (item is Popular) {
-        return Movie(
-          id: item.id?.toString(),
-          title: item.title,
-          posterPath: item.posterPath,
-          releaseDate: item.releaseDate,
-          voteAverage: item.voteAverage,
-        );
-      } else if (item is NewRelease) {
-        return Movie(
-          id: item.id?.toString(),
-          title: item.title,
-          posterPath: item.posterPath,
-          releaseDate: item.releaseDate,
-          voteAverage: item.voteAverage,
-        );
-      } else if (item is TopRated) {
+      if (item is Popular || item is NewRelease || item is TopRated) {
         return Movie(
           id: item.id?.toString(),
           title: item.title,
@@ -87,6 +71,28 @@ class HomeTabState extends State<HomeTab> {
         throw Exception('Unknown item type');
       }
     }).toList();
+  }
+
+  Widget _buildErrorWidget() {
+    return Column(
+      children: [
+        const Text('Something went wrong'),
+        ElevatedButton(
+          onPressed: () {
+            setState(() {});
+          },
+          child: const Text('Try again'),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLoadingWidget() {
+    return const Center(
+      child: CircularProgressIndicator(
+        color: AppColors.whiteColor,
+      ),
+    );
   }
 
   @override
@@ -104,24 +110,10 @@ class HomeTabState extends State<HomeTab> {
             future: ApiManager.getPopularMovies(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: CircularProgressIndicator(
-                    color: AppColors.whiteColor,
-                  ),
-                );
+                return _buildLoadingWidget();
               } else if (snapshot.hasError ||
                   snapshot.data?.statusCode != 200) {
-                return Column(
-                  children: [
-                    const Text('Something went wrong'),
-                    ElevatedButton(
-                      onPressed: () {
-                        setState(() {});
-                      },
-                      child: const Text('Try again'),
-                    ),
-                  ],
-                );
+                return _buildErrorWidget();
               } else if (snapshot.hasData &&
                   snapshot.data?.data.results != null &&
                   snapshot.data!.data.results!.isNotEmpty) {
@@ -228,11 +220,13 @@ class HomeTabState extends State<HomeTab> {
                                             left: 0,
                                             child: Container(
                                               decoration: BoxDecoration(
-                                                color: Colors.black54,
-                                                borderRadius: BorderRadius.only(
-                                                  topLeft: Radius.circular(8),
+                                                color: AppColors.blackColor
+                                                    .withOpacity(0.6),
+                                                borderRadius:
+                                                    const BorderRadius.only(
+                                                  topLeft: Radius.circular(6),
                                                   bottomRight:
-                                                      Radius.circular(8),
+                                                      Radius.circular(15),
                                                 ),
                                               ),
                                               padding:
@@ -334,24 +328,10 @@ class HomeTabState extends State<HomeTab> {
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
-                          return const Center(
-                            child: CircularProgressIndicator(
-                              color: AppColors.whiteColor,
-                            ),
-                          );
+                          return _buildLoadingWidget();
                         } else if (snapshot.hasError ||
                             snapshot.data?.statusCode != 200) {
-                          return Column(
-                            children: [
-                              const Text('Something went wrong'),
-                              ElevatedButton(
-                                onPressed: () {
-                                  setState(() {});
-                                },
-                                child: const Text('Try again'),
-                              ),
-                            ],
-                          );
+                          return _buildErrorWidget();
                         } else if (snapshot.hasData &&
                             snapshot.data?.data.results != null &&
                             snapshot.data!.data.results!.isNotEmpty) {
@@ -402,24 +382,10 @@ class HomeTabState extends State<HomeTab> {
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
-                          return const Center(
-                            child: CircularProgressIndicator(
-                              color: AppColors.whiteColor,
-                            ),
-                          );
+                          return _buildLoadingWidget();
                         } else if (snapshot.hasError ||
                             snapshot.data?.statusCode != 200) {
-                          return Column(
-                            children: [
-                              const Text('Something went wrong'),
-                              ElevatedButton(
-                                onPressed: () {
-                                  setState(() {});
-                                },
-                                child: const Text('Try again'),
-                              ),
-                            ],
-                          );
+                          return _buildErrorWidget();
                         } else if (snapshot.hasData &&
                             snapshot.data?.data.results != null &&
                             snapshot.data!.data.results!.isNotEmpty) {
