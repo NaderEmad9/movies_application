@@ -1,4 +1,3 @@
-// lib/home_tab/movie_item.dart
 import 'package:flutter/material.dart';
 import 'package:movies_application/browse_tab/category_item.dart';
 import 'package:movies_application/browse_tab/genre_tags.dart';
@@ -10,6 +9,7 @@ import 'package:movies_application/home_tab/movie_details/screen/movie_details_s
 import 'package:movies_application/model/DiscoverResponse.dart';
 import 'package:movies_application/provider/genre_provider.dart';
 import 'package:movies_application/ui/app_colors.dart';
+import 'package:movies_application/api/api_manager.dart';
 
 class MovieArguments {
   final String title;
@@ -63,6 +63,28 @@ class _MovieItemState extends State<MovieItem> {
     }
   }
 
+  Future<void> _navigateToMovieDetails(
+      BuildContext context, MovieArguments args) async {
+    try {
+      final response = await ApiManager.getDetailsMovieApi(args.id);
+      if (response.statusCode == 200) {
+        final movieDetails = response.data;
+        Navigator.pushNamed(
+          context,
+          MovieDetailsScreen.routeName,
+          arguments: movieDetails,
+        );
+      } else {
+        throw Exception('Failed to load movie details');
+      }
+    } catch (error) {
+      // Handle error, e.g., show a snackbar or dialog
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to load movie details: $error')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     String title = widget.movies.title ?? '';
@@ -85,10 +107,14 @@ class _MovieItemState extends State<MovieItem> {
                     borderRadius: BorderRadius.circular(12),
                     child: InkWell(
                       onTap: () {
-                        Navigator.pushNamed(
-                            context, MovieDetailsScreen.routeName,
-                            arguments: MovieArguments(
-                                title: title, id: id, genreids: genreids));
+                        _navigateToMovieDetails(
+                          context,
+                          MovieArguments(
+                            title: title,
+                            id: id,
+                            genreids: genreids,
+                          ),
+                        );
                       },
                       child: Image.network(
                         'https://image.tmdb.org/t/p/w500${widget.movies.posterPath}',
@@ -104,9 +130,14 @@ class _MovieItemState extends State<MovieItem> {
                     children: [
                       InkWell(
                         onTap: () {
-                          Navigator.pushNamed(
-                              context, MovieDetailsScreen.routeName,
-                              arguments: widget.movies.id);
+                          _navigateToMovieDetails(
+                            context,
+                            MovieArguments(
+                              title: title,
+                              id: id,
+                              genreids: genreids,
+                            ),
+                          );
                         },
                         child: Text(
                           widget.movies.title ?? '',
@@ -161,9 +192,13 @@ class _MovieItemState extends State<MovieItem> {
                                 name: genreName,
                                 onTap: () {
                                   Navigator.pushNamed(
-                                      context, MoviesbygenreTab.routeName,
-                                      arguments: GenreArguments(
-                                          genre: genreName, genreid: id));
+                                    context,
+                                    MoviesbygenreTab.routeName,
+                                    arguments: GenreArguments(
+                                      genre: genreName,
+                                      genreid: id,
+                                    ),
+                                  );
                                 },
                               );
                             }).toList() ??

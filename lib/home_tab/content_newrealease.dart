@@ -1,36 +1,40 @@
 import 'package:flutter/material.dart';
-import 'package:movies_application/model/NewReleaseResponse.dart';
 import '../ui/app_colors.dart';
 import 'movie_details/screen/movie_details_screen.dart';
 import '../model/Movie.dart';
+import 'package:movies_application/api/api_manager.dart';
+import 'package:movies_application/model/MovieDetailsResponse.dart';
 
 class ContentForNewRelease extends StatefulWidget {
   final String title;
-  final List<NewRelease> movies;
+  final List<Movie> movies;
   final bool isScrollable;
   final Map<int, bool> initialBookmarks;
-  final void Function(int) onBookmarkChanged;
+  final Function(int) onBookmarkChanged;
 
-  const ContentForNewRelease({
-    super.key,
+  ContentForNewRelease({
     required this.title,
     required this.movies,
-    this.isScrollable = false,
+    required this.isScrollable,
     required this.initialBookmarks,
     required this.onBookmarkChanged,
   });
 
   @override
-  ContentState createState() => ContentState();
+  _ContentForNewReleaseState createState() => _ContentForNewReleaseState();
 }
 
-class ContentState extends State<ContentForNewRelease> {
+class _ContentForNewReleaseState extends State<ContentForNewRelease> {
   late Map<int, bool> _isBookmarked;
 
   @override
   void initState() {
     super.initState();
-    _isBookmarked = Map.from(widget.initialBookmarks);
+    _isBookmarked = {
+      for (var movie in widget.movies)
+        int.parse(movie.id!):
+            widget.initialBookmarks[int.parse(movie.id!)] ?? false
+    };
   }
 
   @override
@@ -55,22 +59,32 @@ class ContentState extends State<ContentForNewRelease> {
               itemCount: widget.movies.length,
               itemBuilder: (context, index) {
                 var movie = widget.movies[index];
-                bool isBookmarked = _isBookmarked[index] ?? false;
+                int movieId = int.parse(movie.id!);
+                bool isBookmarked = _isBookmarked[movieId] ?? false;
 
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: Stack(
                     children: [
                       InkWell(
-                        onTap: () {
-                          Navigator.pushNamed(
-                            context,
-                            MovieDetailsScreen.routeName,
-                            arguments: {
-                              'id': movie.id,
-                              'genreIds': movie.genreIds,
-                            },
-                          );
+                        onTap: () async {
+                          try {
+                            HttpResponse<MovieDetailsResponse> movieDetails =
+                                await ApiManager.getDetailsMovieApi(movieId);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => MovieDetailsScreen(
+                                    movieDetails: movieDetails.data),
+                              ),
+                            );
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                  content:
+                                      Text('Failed to load movie details')),
+                            );
+                          }
                         },
                         child: Container(
                           width: width * 0.235,
@@ -94,19 +108,19 @@ class ContentState extends State<ContentForNewRelease> {
                         child: GestureDetector(
                           onTap: () {
                             setState(() {
-                              _isBookmarked[index] = !isBookmarked;
-                              widget.onBookmarkChanged(index);
+                              _isBookmarked[movieId] = !isBookmarked;
+                              widget.onBookmarkChanged(movieId);
                             });
                           },
-                          child: isBookmarked
-                              ? const Icon(
-                                  Icons.bookmark_added,
-                                  color: AppColors.orangeColor,
-                                )
-                              : const Icon(
-                                  Icons.bookmark_add_outlined,
-                                  color: AppColors.whiteColor,
-                                ),
+                          child: Icon(
+                            isBookmarked
+                                ? Icons.bookmark
+                                : Icons.bookmark_border,
+                            color: isBookmarked
+                                ? AppColors.orangeColor
+                                : AppColors.whiteColor,
+                            size: 24, // Ensure consistent size
+                          ),
                         ),
                       ),
                       Positioned(

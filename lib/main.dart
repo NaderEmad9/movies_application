@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movies_application/browse_tab/moviesbygenre_tab.dart';
+import 'package:movies_application/model/MovieDetailsResponse.dart';
 import 'package:movies_application/provider/bookmark_provider.dart';
 import 'package:provider/provider.dart'; // Import the provider package
 import 'package:movies_application/provider/app_locale_provider.dart';
@@ -40,10 +41,21 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: AppScreen.routeName,
       locale: Locale(localeProvider.languageCode),
+      onGenerateRoute: (settings) {
+        if (settings.name == MovieDetailsScreen.routeName) {
+          final args = settings.arguments as MovieDetailsResponse;
+          return MaterialPageRoute(
+            builder: (context) {
+              return MovieDetailsScreen(movieDetails: args);
+            },
+          );
+        }
+        // Add other routes here if needed
+        return null;
+      },
       routes: {
         AppScreen.routeName: (context) => const AppScreen(),
-        MovieDetailsScreen.routeName: (context) => MovieDetailsScreen(),
-        MoviesbygenreTab.routeName: (context) => const MoviesbygenreTab()
+        MoviesbygenreTab.routeName: (context) => const MoviesbygenreTab(),
       },
     );
   }

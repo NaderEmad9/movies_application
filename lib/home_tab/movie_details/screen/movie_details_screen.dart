@@ -14,118 +14,84 @@ import 'package:movies_application/model/Movie.dart';
 
 class MovieDetailsScreen extends StatelessWidget {
   static const String routeName = "movie_details_screen";
-  late double height;
-  late double width;
-  String imageUrlConstant = "https://image.tmdb.org/t/p/w500";
+  final MovieDetailsResponse movieDetails;
+
+  const MovieDetailsScreen({Key? key, required this.movieDetails})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    height = MediaQuery.of(context).size.height;
-    width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+    String imageUrlConstant = "https://image.tmdb.org/t/p/w500";
 
-    // Use the MovieArguments to retrieve data passed to the screen
-    final args = ModalRoute.of(context)!.settings.arguments as MovieArguments;
-
-    int movieId = args.id;
-    List<int> movieGenreIds = args.genreids;
+    List<int?> movieGenreIds =
+        movieDetails.genres?.map((genre) => genre.id).toList() ?? [];
     List<String> genreNames =
         movieGenreIds.map((id) => GenreMap.genreMap[id] ?? 'Unknown').toList();
 
-    return FutureBuilder<HttpResponse<MovieDetailsResponse>>(
-      future: ApiManager.getDetailsMovieApi(movieId),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
-            child: CircularProgressIndicator(
-              color: AppColors.orangeColor,
+    String releaseDateFormattedYear = DateFormat('yyyy').format(
+        DateTime.parse(movieDetails.releaseDate ?? DateTime.now().toString()));
+
+    String imageUrl = movieDetails.backdropPath != null
+        ? "$imageUrlConstant${movieDetails.backdropPath}"
+        : "https://wallpapers.com/images/high/error-placeholder-image-ozordu8s6n3xhi9h-2.png";
+
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: AppColors.navigationBarColor,
+        title: Text(
+          movieDetails.title ?? "Title not Available",
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
+        centerTitle: true,
+        actions: [
+          BookmarkButton(movieDetailsList: movieDetails),
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ShowMovies(imageUrl: imageUrl),
+            ShowMovieDetails(
+              title: movieDetails.title,
+              releaseDate: releaseDateFormattedYear,
+              imageUrl: imageUrl,
+              genreMovie: genreNames,
+              overview: movieDetails.overview,
+              voteAverage: movieDetails.voteAverage.toString(),
             ),
-          );
-        } else if (snapshot.hasError || snapshot.data?.statusCode != 200) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text('Something went wrong'),
-              TextButton(
-                  onPressed: () {
-                    ApiManager.getDetailsMovieApi(movieId);
-                  },
-                  child: const Text('Try Again')),
-            ],
-          );
-        } else {
-          var movieDetailsList = snapshot.data?.data;
-
-          String releaseDateFormattedYear = DateFormat('yyyy').format(
-              DateTime.parse(
-                  movieDetailsList?.releaseDate ?? DateTime.now().toString()));
-
-          String imageUrl = movieDetailsList?.backdropPath != null
-              ? "$imageUrlConstant${movieDetailsList?.backdropPath}"
-              : "https://wallpapers.com/images/high/error-placeholder-image-ozordu8s6n3xhi9h-2.png";
-
-          return Scaffold(
-            appBar: AppBar(
-              backgroundColor: AppColors.navigationBarColor,
-              title: Text(
-                movieDetailsList!.title ?? "title not Available",
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              centerTitle: true,
-              actions: [
-                // Bookmark Button
-                BookmarkButton(movieDetailsList: movieDetailsList),
-              ],
-            ),
-            body: SingleChildScrollView(
+            Container(
+              height: height * 0.46,
+              margin: EdgeInsets.only(top: 15, bottom: height * 0.07),
+              color: AppColors.moreLikeThisBackgroundColor,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  ShowMovies(
-                    imageUrl: imageUrl,
-                  ),
-                  ShowMovieDetails(
-                      title: movieDetailsList.title,
-                      releaseDate: releaseDateFormattedYear,
-                      imageUrl: imageUrl,
-                      genreMovie: genreNames,
-                      overview: movieDetailsList.overview,
-                      voteAverage: movieDetailsList.voteAverage.toString()),
                   Container(
-                    height: height * 0.46,
-                    margin: EdgeInsets.only(top: 15, bottom: height * 0.07),
-                    color: AppColors.moreLikeThisBackgroundColor,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.only(left: 22, top: 20),
-                          child: Text(
-                            "More Like This",
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium!
-                                .copyWith(fontWeight: FontWeight.w900),
-                          ),
-                        ),
-                        Expanded(
-                          child: SimilarMovies(
-                            movieId: movieId,
-                          ),
-                        )
-                      ],
+                    margin: const EdgeInsets.only(left: 22, top: 20),
+                    child: Text(
+                      "More Like This",
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleMedium
+                          ?.copyWith(fontWeight: FontWeight.w900),
                     ),
+                  ),
+                  Expanded(
+                    child: SimilarMovies(movieId: movieDetails.id!),
                   ),
                 ],
               ),
             ),
-          );
-        }
-      },
+          ],
+        ),
+      ),
     );
   }
 }
 
-// Bookmark button implementation
 class BookmarkButton extends StatefulWidget {
   final MovieDetailsResponse? movieDetailsList;
 
@@ -151,7 +117,6 @@ class _BookmarkButtonState extends State<BookmarkButton> {
     final movie = Movie(
       id: widget.movieDetailsList?.id.toString() ?? '',
       title: widget.movieDetailsList?.title ?? '',
-      // Add other necessary fields for Movie
     );
     final bookmarked = await bookmarkProvider.isBookmarked(movie);
     setState(() {
@@ -165,7 +130,6 @@ class _BookmarkButtonState extends State<BookmarkButton> {
     final movie = Movie(
       id: widget.movieDetailsList?.id.toString() ?? '',
       title: widget.movieDetailsList?.title ?? '',
-      // Add other necessary fields for Movie
     );
 
     setState(() {

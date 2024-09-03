@@ -1,19 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:movies_application/browse_tab/category_item.dart';
-import 'package:movies_application/browse_tab/genre_tags.dart';
-import 'package:movies_application/browse_tab/moviesbygenre_tab.dart';
-import 'package:provider/provider.dart';
-import 'package:movies_application/model/Movie.dart';
-import 'package:movies_application/provider/bookmark_provider.dart';
-import 'package:movies_application/home_tab/movie_details/screen/movie_details_screen.dart';
-import 'package:movies_application/model/DiscoverResponse.dart';
-import 'package:movies_application/provider/genre_provider.dart';
+import 'package:movies_application/home_tab/movie_details/widgets/custom_container_genre_movie.dart';
+import 'package:movies_application/model/genre_map.dart';
 import 'package:movies_application/ui/app_colors.dart';
-import 'package:movies_application/browse_tab/movie_item.dart';
+import 'package:movies_application/browse_tab/moviesbygenre_tab.dart';
+import 'package:movies_application/browse_tab/category_item.dart';
 
-// MovieArguments class for passing arguments to movie details screen
-
-// ShowMovieDetails class to display movie details
 class ShowMovieDetails extends StatelessWidget {
   final String? title;
   final String? releaseDate;
@@ -23,214 +14,94 @@ class ShowMovieDetails extends StatelessWidget {
   final String? voteAverage;
 
   const ShowMovieDetails({
-    super.key,
+    Key? key,
     this.title,
     this.releaseDate,
     this.imageUrl,
     required this.genreMovie,
     this.overview,
     this.voteAverage,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          title ?? '',
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
-        Text(
-          'Release Date: $releaseDate',
-          style: Theme.of(context).textTheme.bodyMedium,
-        ),
-        // Additional details go here
-      ],
-    );
-  }
-}
-
-// MovieItem widget to display a single movie item
-class MovieItem extends StatefulWidget {
-  final Discover movies;
-
-  const MovieItem({super.key, required this.movies});
-
-  @override
-  State<MovieItem> createState() => _MovieItemState();
-}
-
-class _MovieItemState extends State<MovieItem> {
-  late bool isBookmarked = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _checkIfBookmarked();
-  }
-
-  Future<void> _checkIfBookmarked() async {
-    final bookmarkProvider =
-        Provider.of<BookmarkProvider>(context, listen: false);
-    final movie = Movie.fromDiscover(widget.movies);
-    final bookmarked = await bookmarkProvider.isBookmarked(movie);
-    setState(() {
-      isBookmarked = bookmarked;
-    });
-  }
-
-  void onBookmark() async {
-    final bookmarkProvider =
-        Provider.of<BookmarkProvider>(context, listen: false);
-    final movie = Movie.fromDiscover(widget.movies);
-
-    setState(() {
-      isBookmarked = !isBookmarked;
-    });
-
-    if (isBookmarked) {
-      await bookmarkProvider.addBookmark(movie);
-    } else {
-      await bookmarkProvider.removeBookmark(movie);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    String title = widget.movies.title ?? '';
-    int id = widget.movies.id ?? 0;
-    List<int>? genreids = widget.movies.genreIds ?? [];
-    double height = MediaQuery.of(context).size.height;
-
-    return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(5),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 16), // Increased space between items
+          Row(
             children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: height * 0.19,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.pushNamed(
-                            context,
-                            MovieDetailsScreen.routeName,
-                            arguments: MovieArguments(
-                              title: title,
-                              id: id,
-                              genreids: genreids,
-                            ),
-                          );
-                        },
-                        child: Image.network(
-                          'https://image.tmdb.org/t/p/w500${widget.movies.posterPath}',
-                          fit: BoxFit.cover,
-                        ),
-                      ),
+              Expanded(
+                child: Text(
+                  'Release Date: $releaseDate',
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleSmall
+                      ?.copyWith(color: Colors.white),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              Container(
+                height: 20,
+                width: 1,
+                color: AppColors.lightGreyColor,
+              ),
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.star, color: Colors.amber, size: 20),
+                    const SizedBox(width: 5),
+                    Text(
+                      voteAverage ?? '0.0',
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleSmall
+                          ?.copyWith(color: Colors.white),
                     ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            Navigator.pushNamed(
-                              context,
-                              MovieDetailsScreen.routeName,
-                              arguments: MovieArguments(
-                                title: title,
-                                id: id,
-                                genreids: genreids,
-                              ),
-                            );
-                          },
-                          child: Text(
-                            widget.movies.title ?? '',
-                            style: Theme.of(context).textTheme.titleSmall,
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.topRight,
-                          child: IconButton(
-                            icon: Icon(
-                              isBookmarked
-                                  ? Icons.bookmark
-                                  : Icons.bookmark_border,
-                              color: isBookmarked
-                                  ? AppColors.orangeColor
-                                  : AppColors.lightGreyColor,
-                            ),
-                            onPressed: onBookmark,
-                          ),
-                        ),
-                        SizedBox(height: height * 0.01),
-                        Row(
-                          children: [
-                            const Icon(Icons.star,
-                                color: Colors.amber, size: 16),
-                            const SizedBox(width: 5),
-                            Text(
-                              '${widget.movies.voteAverage ?? 0.0}',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall
-                                  ?.copyWith(color: AppColors.lightGreyColor),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: height * 0.01),
-                        Text(
-                          widget.movies.releaseDate ?? '',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodySmall
-                              ?.copyWith(color: AppColors.lightGreyColor),
-                        ),
-                        SizedBox(height: height * 0.01),
-                        Wrap(
-                          spacing: 5.0,
-                          runSpacing: 5.0,
-                          children: genreids.map((id) {
-                            final genreName =
-                                GenreProvider.getGenreNameById(id);
-                            return GenreTag(
-                              id: id,
-                              name: genreName,
-                              onTap: () {
-                                Navigator.pushNamed(
-                                  context,
-                                  MoviesbygenreTab.routeName,
-                                  arguments: GenreArguments(
-                                    genre: genreName,
-                                    genreid: id,
-                                  ),
-                                );
-                              },
-                            );
-                          }).toList(),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ],
           ),
-        ),
-        const Divider(
-          thickness: 0.5,
-          color: AppColors.lightGreyColor,
-        ),
-      ],
+          const SizedBox(height: 16), // Increased space between items
+          Center(
+            child: Wrap(
+              spacing: 10.0, // Increased space between genre boxes
+              runSpacing: 10.0, // Increased space between genre boxes
+              children: genreMovie.map((genre) {
+                return CustomContainerGenreMovie(
+                  genreMovie: genre,
+                  onTap: () {
+                    // Navigate to MoviesbygenreTab with the selected genre
+                    Navigator.pushNamed(
+                      context,
+                      MoviesbygenreTab.routeName,
+                      arguments: GenreArguments(
+                        genre: genre ?? 'Unknown',
+                        genreid: GenreMap.genreMap.keys.firstWhere(
+                          (key) => GenreMap.genreMap[key] == genre,
+                          orElse: () => 0,
+                        ),
+                      ),
+                    );
+                  },
+                );
+              }).toList(),
+            ),
+          ),
+          const SizedBox(height: 16), // Increased space between items
+          Text(
+            overview ?? '',
+            style: Theme.of(context)
+                .textTheme
+                .titleSmall
+                ?.copyWith(color: Colors.white),
+          ),
+        ],
+      ),
     );
   }
 }

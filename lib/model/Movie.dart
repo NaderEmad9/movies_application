@@ -1,16 +1,18 @@
-import 'DiscoverResponse.dart';
+import 'package:movies_application/model/DiscoverResponse.dart';
 
 class Movie {
   final String? id;
   final String? title;
   final String? posterPath;
   final String? releaseDate;
+  final double? voteAverage; // Add this property
 
   Movie({
     this.id,
     this.title,
     this.posterPath,
     this.releaseDate,
+    this.voteAverage, // Add this property
   });
 
   factory Movie.fromJson(Map<String, dynamic> json) {
@@ -19,6 +21,8 @@ class Movie {
       title: json['title'],
       posterPath: json['poster_path'],
       releaseDate: json['release_date'],
+      voteAverage:
+          (json['vote_average'] as num?)?.toDouble(), // Add this property
     );
   }
 
@@ -28,16 +32,17 @@ class Movie {
       'title': title,
       'poster_path': posterPath,
       'release_date': releaseDate,
+      'vote_average': voteAverage, // Add this property
     };
   }
 
-  get voteAverage => null;
   factory Movie.fromDiscover(Discover discover) {
     return Movie(
       id: discover.id.toString(),
       title: discover.title,
       posterPath: discover.posterPath,
       releaseDate: discover.releaseDate,
+      voteAverage: discover.voteAverage, // Add this property
     );
   }
 }

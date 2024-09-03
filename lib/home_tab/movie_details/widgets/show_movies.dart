@@ -1,14 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-
 import '../../../ui/app_colors.dart';
 
 class ShowMovies extends StatelessWidget {
-  String? imageUrl;
+  final String? imageUrl;
 
-  ShowMovies({
-    required this.imageUrl,
-  });
+  const ShowMovies({Key? key, required this.imageUrl}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,9 +24,10 @@ class ShowMovies extends StatelessWidget {
               height: height * 0.25,
               fit: BoxFit.fill,
               placeholder: (context, url) => const Center(
-                  child: CircularProgressIndicator(
-                color: AppColors.orangeColor,
-              )),
+                child: CircularProgressIndicator(
+                  color: AppColors.orangeColor,
+                ),
+              ),
               errorWidget: (context, url, error) => const Icon(
                 Icons.error,
                 color: AppColors.redColor,
