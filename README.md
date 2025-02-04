@@ -65,16 +65,20 @@ This **Movies Application** is a Flutter app designed to help users discover and
 ## Screenshots
 
 <p align="center">
-  <img src="https://github.com/NaderEmad9/movies_application/raw/Development/assets/screenshots/search.png" alt="Task List View Dark" width="220" style="margin: 10px;"/>
-  <img src="https://github.com/NaderEmad9/movies_application/raw/Development/assets/screenshots/watchlist.png" alt="Task List View Dark" width="220" style="margin: 10px;"/>
-  <img src="https://github.com/NaderEmad9/movies_application/raw/Development/assets/screenshots/details.png" alt="Task List View Dark" width="220" style="margin: 10px;"/>
+  <img src="https://github.com/NaderEmad9/movies_application/raw/Development/assets/screenshots/splash.png" alt="Splash Screen" width="220" style="margin: 10px;"/>
+  <img src="https://github.com/NaderEmad9/movies_application/raw/Development/assets/screenshots/home.png" alt="Home Screen" width="220" style="margin: 10px;"/>
+  <img src="https://github.com/NaderEmad9/movies_application/raw/Development/assets/screenshots/category.png" alt="Category Screen" width="220" style="margin: 10px;"/>
 </p>
 
 <p align="center">
-  <img src="https://github.com/NaderEmad9/movies_application/raw/Development/assets/screenshots/home.png" alt="Task List View Dark" width="220" style="margin: 10px;"/>
-  <img src="https://github.com/NaderEmad9/movies_application/raw/Development/assets/screenshots/category.png" alt="Task List View Dark" width="220" style="margin: 10px;"/>
+  <img src="https://github.com/NaderEmad9/movies_application/raw/Development/assets/screenshots/search.png" alt="Search Screen" width="220" style="margin: 10px;"/>
+  <img src="https://github.com/NaderEmad9/movies_application/raw/Development/assets/screenshots/watchlist.png" alt="Watchlist Screen" width="220" style="margin: 10px;"/>
+  <img src="https://github.com/NaderEmad9/movies_application/raw/Development/assets/screenshots/details.png" alt="Details Screen" width="220" style="margin: 10px;"/>
 </p>
 
+<p align="center">
+  <img src="https://github.com/NaderEmad9/movies_application/raw/Development/assets/screenshots/catin.png" alt="Category In Screen" width="220" style="margin: 10px;"/>
+</p>
 ## Team Contributions
 
 This project was developed as a team effort, with contributions from:
